@@ -78,14 +78,11 @@ export const Signup = async (username, email, ph_no, user_type, password) => {
 
 // 2. LOGIN
 export const login = async (username, password) => {
-  console.log("username, password", username, password)
   try {
     store.dispatch(setLoading(true)); 
-    console.log("1")
     const response = await axios.post(`${API_BASE_URL}/api/login`, { username, password });
-    console.log('response', response)
     if (!response.data.token) {
-      return response.data; // Return server message if no token
+      return response.data;
     }
     const { token } = response.data;
     storeAuthToken(token);

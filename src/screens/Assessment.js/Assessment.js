@@ -36,6 +36,7 @@ const RadioButton = ({ selected, onPress, style }) => {
 };
 
 const Assessment = ({ navigation, route }) => {
+    useFooterVisibility()
     const { test_id, submitted } = route.params || {};
     const [answers, setAnswers] = useState({});
     const [assessments, setAssessments] = useState(null);
@@ -49,7 +50,6 @@ const Assessment = ({ navigation, route }) => {
     const { colors: themeColors, isDark } = useAppTheme();
     const insets = useSafeAreaInsets();
 
-    useFooterVisibility()
     useEffect(() => {
         checkExistingResults();
         fetchAssessments();
@@ -59,8 +59,7 @@ const Assessment = ({ navigation, route }) => {
         setLoading(true);
         try {
             const response = await getAssessment(globalCourseId);
-            const matchedResults = response.tests.find((item) => item.test_id === test_id)
-            console.log("matchedResults", matchedResults)
+            const matchedResults = response.tests.find((item) => item.test_id === test_id);
             setAssessments(matchedResults);
         } catch (error) {
             console.error('Error fetching assessments:', error);

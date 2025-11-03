@@ -45,6 +45,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { useAppTheme } from '../../hook/useAppTheme';
 import { useScrollDetection } from '../../hook/useScrollDetection';
+import { useFooterVisibility } from '../../hook/useFooterVisibility';
 
 const getPriorityColor = (priority) => {
     switch (priority) {
@@ -182,6 +183,7 @@ const FeedbackModalComponent = ({
 const { width } = Dimensions.get('window');
 
 const CourseDetailsScreen = ({ route, navigation }) => {
+    useFooterVisibility()
     // const { course } = route.params;
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);

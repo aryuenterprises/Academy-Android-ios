@@ -106,6 +106,7 @@ const LoginScreen = ({ navigation }) => {
                           setSubmitting(true);
                           const response = await login(values.email, values.password); // Call the API
                           if (response.token) {
+                            console.log("response.token", response.token)
                             resetToApp();
                           } else {
                             setSubmitError(response?.message);

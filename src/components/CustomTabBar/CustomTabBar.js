@@ -3,13 +3,11 @@ import { View, TouchableOpacity, StyleSheet, Animated, Text, Platform } from 're
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { hp, moderateScale, wp } from '../../utils/responsive';
-import { globalstyles } from '../../utils/globalStyles';
 import { useAppTheme } from '../../hook/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CustomTabBar = ({ state, descriptors, navigation }) => {
-    const dispatch = useDispatch();
     const { colors: themeColors, isDark } = useAppTheme();
     const isFooterVisible = useSelector((state) => state.footer.isVisible);
     const translateY = useRef(new Animated.Value(0)).current;

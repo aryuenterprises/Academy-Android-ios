@@ -8,14 +8,11 @@ import { clearGlobalCourseId } from '../redux/slices/authSlice';
 export const useFooterVisibility = () => {
   const dispatch = useDispatch();
   const route = useRoute();
-console.log("route.name", route.name)
-  // Screens where footer should be hidden
-  // const hideFooterScreens = ["AttendanceDetailScreen"];
-  const hideFooterScreens = ['TaskDetail', 'Assessment', "ChatScreen", "AttendanceDetailScreen"];
+  const hideFooterScreens = ['TaskDetail', 'Assessment', "ChatScreen", "AttendanceDetailScreen", "CourseDetailScreen"];
   const shouldHideFooter = hideFooterScreens.includes(route.name);
+  
   useEffect(() => {
     if (shouldHideFooter) {
-      console.log("true")
       dispatch(hideFooter());
     } else {
       dispatch(showFooter());

@@ -133,7 +133,6 @@ const CourseListScreen = () => {
     }, []);
 
     const handleNavigation = (item) => {
-        console.log("item", item.course_id)
         store.dispatch(setGlobalCourseId(item.course_id));
         navigation.navigate('CourseDetailScreen')
     }

@@ -14,7 +14,7 @@ export const useScrollDetection = () => {
   const isScrolling = useRef(false);
 
   // Screens where we want to hide footer completely
-  const hideFooterScreens = ['TaskDetail', 'Assessment', "ChatScreen", "AttendanceDetailScreen"];
+  const hideFooterScreens = ['TaskDetail', 'Assessment', "ChatScreen", "AttendanceDetailScreen", "CourseDetailScreen"];
 
   // Check if current screen should hide footer
   const shouldHideFooter = hideFooterScreens.includes(route.name);
@@ -67,8 +67,11 @@ export const useScrollDetection = () => {
 
         // Show footer again after scrolling stops
         scrollTimeout.current = setTimeout(() => {
-          isScrolling.current = false;
-          dispatch(showFooter());
+          if (shouldHideFooter) {
+            console.log("Show footer again")
+            isScrolling.current = false;
+            dispatch(showFooter());
+          }
         }, 1500);
       },
       useNativeDriver: true,

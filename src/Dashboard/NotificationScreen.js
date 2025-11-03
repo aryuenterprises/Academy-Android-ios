@@ -20,10 +20,10 @@ const NotificationScreen = ({ route, navigation }) => {
     const AnimatedFlatList = createAnimatedScrollView(FlatList);
     const [refreshing, setRefreshing] = useState(false);
     const { colors: themeColors } = useAppTheme();
+
     const fetchNotifications = async () => {
         try {
             setLoading(true);
-            // Assuming you have an API endpoint to fetch notifications
             const response = await getNotifications(); // You'll need to implement this in your auth service
             setNotifications(response.notifications || []);
         } catch (error) {
@@ -66,6 +66,8 @@ const NotificationScreen = ({ route, navigation }) => {
     )
 
     const handleNotificationPress = async (item) => {
+        console.log("item?.message?.toLowerCase()", item)
+        return
         try {
             const response = await api.post(`${API_BASE_URL}/api/notifications/mark_read`, {
                 id: item?.id

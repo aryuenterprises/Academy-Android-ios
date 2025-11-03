@@ -193,37 +193,6 @@ const StudentDashboard = () => {
               </View>
             </View>
 
-            {/* Quick Stats Row */}
-            <View style={styles.statsRow}>
-              <StatCard
-                icon="calendar-month"
-                value={`${data?.attendance?.percentage}%`}
-                label="Attendance"
-                color={themeColors.present}
-                background={themeColors.presetStat}
-                theme={themeColors}
-                screen={"AttendanceDetailScreen"}
-              />
-              <StatCard
-                icon="assignment-turned-in"
-                value={`${data?.assignments?.done}/${data?.assignments?.total}`}
-                label="Tasks"
-                color={themeColors.blue}
-                background={themeColors.taskStat}
-                theme={themeColors}
-                screen={"AttendanceDetailScreen"}
-              />
-              <StatCard
-                icon="trending-up"
-                value={`${data?.student_progress?.progress_percent}%`}
-                label="Progress"
-                color={themeColors.warning}
-                background={themeColors.progressStat}
-                theme={themeColors}
-                screen={"AttendanceDetailScreen"}
-              />
-            </View>
-
             {/* Announcements Carousel Banner */}
             {data?.announcements?.length > 0 ? (
               <>
@@ -272,7 +241,7 @@ const StudentDashboard = () => {
               </>
             ) : (
               <View
-                style={[styles.announcementContainer, { borderRadius: moderateScale(13), marginTop: hp("1%"), overflow: "hidden" }]}
+                style={[styles.announcementContainer, { borderRadius: moderateScale(13), marginVertical: hp("1%"), overflow: "hidden" }]}
               >
                 <ImageBackground
                   source={require("../assets/images/banner_bg.png")}
@@ -300,6 +269,37 @@ const StudentDashboard = () => {
                 </View>
               </View>
             )}
+
+            {/* Quick Stats Row */}
+            <View style={styles.statsRow}>
+              <StatCard
+                icon="calendar-month"
+                value={`${data?.attendance?.percentage}%`}
+                label="Attendance"
+                color={themeColors.present}
+                background={themeColors.presetStat}
+                theme={themeColors}
+                screen={"AttendanceDetailScreen"}
+              />
+              <StatCard
+                icon="assignment-turned-in"
+                value={`${data?.assignments?.done}/${data?.assignments?.total}`}
+                label="Tasks"
+                color={themeColors.blue}
+                background={themeColors.taskStat}
+                theme={themeColors}
+                screen={"AttendanceDetailScreen"}
+              />
+              <StatCard
+                icon="trending-up"
+                value={`${data?.student_progress?.progress_percent}%`}
+                label="Progress"
+                color={themeColors.warning}
+                background={themeColors.progressStat}
+                theme={themeColors}
+                screen={"AttendanceDetailScreen"}
+              />
+            </View>
 
             {/* Upcoming Class Schedule */}
             {data?.upcoming_schedules?.length > 0 && (
@@ -635,7 +635,7 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: hp('2%'),
+    marginTop: hp('2%'),
     paddingHorizontal: wp('1%'),
   },
   valueContainer: {
