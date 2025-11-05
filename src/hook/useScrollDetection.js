@@ -68,7 +68,6 @@ export const useScrollDetection = () => {
         // Show footer again after scrolling stops
         scrollTimeout.current = setTimeout(() => {
           if (shouldHideFooter) {
-            console.log("Show footer again")
             isScrolling.current = false;
             dispatch(showFooter());
           }

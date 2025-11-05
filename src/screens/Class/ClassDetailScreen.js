@@ -5,6 +5,7 @@ import api from '../../services/api';
 import { colors, globalstyles } from '../../utils/globalStyles';
 import { hp, moderateScale, wp } from '../../utils/responsive';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 const ClassDetailScreen = ({ navigation, route }) => {
   const [classDetails, setClassDetails] = useState(null);
@@ -94,7 +95,11 @@ const ClassDetailScreen = ({ navigation, route }) => {
         setClassDetails(classResponse.data);
         setRelatedCourses(coursesResponse.data);
       } catch (error) {
-        console.log(error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: error.response?.data?.message || 'Error fetching data. Please try again.'
+        });
       } finally {
         setLoading(false);
       }

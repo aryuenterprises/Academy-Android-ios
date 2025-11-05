@@ -72,7 +72,6 @@ const AttendanceScreen = ({ route }) => {
       });
 
       const todayResponse = await api.get(`/api/attendance/${user.student_id}`);
-      console.log("object", todayResponse)
       const todayStatus = todayResponse.data || null;
       setLogs(todayStatus.data)
 
@@ -92,7 +91,11 @@ const AttendanceScreen = ({ route }) => {
             setSelectedCourse(mostRecentRecord);
           }
         } catch (error) {
-          console.error("Error processing attendance data:", error);
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+          });
         }
       }
 
@@ -109,7 +112,6 @@ const AttendanceScreen = ({ route }) => {
         text1: 'Error',
         text2: 'Failed to fetch attendance data'
       });
-      console.error(error);
     } finally {
       setRefreshing(false);
     }
@@ -223,12 +225,11 @@ const AttendanceScreen = ({ route }) => {
         });
       }
     } catch (error) {
-      console.log("error", error.response.data)
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: checkedIn ? 'Failed to check out' : 'Failed to check in'
-      });
+      // Toast.show({
+      //   type: 'error',
+      //   text1: 'Error',
+      //   text2: checkedIn ? 'Failed to check out' : 'Failed to check in'
+      // });
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -275,7 +276,6 @@ const AttendanceScreen = ({ route }) => {
         text1: 'Error',
         text2: onBreak ? 'Failed to end break' : 'Failed to start break'
       });
-      console.error(error);
     }
   };
 

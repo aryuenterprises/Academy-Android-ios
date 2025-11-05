@@ -48,7 +48,6 @@ const LoginScreen = () => {
 
   const { registerInput, focusNextInput } = useFormFocusAdvanced(
     () => {
-      console.log('Auto-submitting form from keyboard...');
       if (formikSubmitRef.current) {
         formikSubmitRef.current();
       }
@@ -62,15 +61,12 @@ const LoginScreen = () => {
       setSubmitError('');
       setSubmitting(true);
       const response = await login(values.email, values.password);
-      console.log("response", response)
       if (response.token) {
-        console.log("response.token", response.token)
         resetToApp();
       } else {
         setSubmitError(response?.message);
       }
     } catch (error) {
-      console.log("Login failed.")
       setSubmitError(
         error.response?.data?.message ||
         error.message ||

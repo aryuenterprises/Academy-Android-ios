@@ -322,7 +322,6 @@ const AttendanceDetailScreen = ({ route }) => {
       setSessions(allLogs);
       calculateStats(allLogs);
     } catch (error) {
-      console.error(error);
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -462,7 +461,6 @@ const AttendanceDetailScreen = ({ route }) => {
         });
       }
     } catch (error) {
-      console.error('Error opening file:', error);
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -484,7 +482,6 @@ const AttendanceDetailScreen = ({ route }) => {
   // });
   //     }
   //   } catch (error) {
-  //     console.error('Error sharing file:', error);
   //   type: 'error',
   //   text1: 'Error',
   //   text2: 'Failed to share file'
@@ -618,7 +615,6 @@ const AttendanceDetailScreen = ({ route }) => {
       return destinationPath;
 
     } catch (error) {
-      console.error('PDF generation failed:', error);
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -691,7 +687,6 @@ const AttendanceDetailScreen = ({ route }) => {
       return filePath;
 
     } catch (error) {
-      console.error('Excel download error:', error);
       Toast.show({
         type: 'error',
         text1: 'Error',

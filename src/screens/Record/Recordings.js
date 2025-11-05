@@ -53,7 +53,11 @@ export const RecordingScreen = () => {
                 setRecordings(sortedRecordings);
             }
         } catch (error) {
-            console.log("Error fetching recordings:", error.response?.data || error.message);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             setLoading(false);
             setRefreshing(false);
@@ -73,7 +77,6 @@ export const RecordingScreen = () => {
             // Format the date using moment
             return date.format('MMM DD, YYYY • hh:mm A');
         } catch (error) {
-            console.error('Error formatting date:', error);
             return dateString;
         }
     };
@@ -89,11 +92,9 @@ export const RecordingScreen = () => {
         }
 
         try {
-            console.log("urlToOpen", urlToOpen)
             Linking.openURL(urlToOpen);
 
         } catch (error) {
-            console.error('Error opening URL:', error);
             Toast.show({
                 type: 'error',
                 text1: 'Error',

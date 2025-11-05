@@ -98,7 +98,6 @@ const ProfileScreen = ({ navigation }) => {
       setData(profile.data);
       setProfilePic(profile.data.profile_pic);
     } catch (error) {
-      console.error("Profile fetch error:", error);
       if (error.code === 'E_PICKER_CANCELLED') {
         Toast.show({
           type: 'info',
@@ -146,7 +145,11 @@ const ProfileScreen = ({ navigation }) => {
 
     } catch (error) {
       if (error.code !== 'E_PICKER_CANCELLED') {
-        console.log('Camera error:', error);
+        Toast.show({
+          type: 'info',
+          text1: 'Cancelled',
+          text2: 'Image selection was cancelled'
+        });
       }
     }
   };
@@ -174,7 +177,11 @@ const ProfileScreen = ({ navigation }) => {
 
     } catch (error) {
       if (error.code !== 'E_PICKER_CANCELLED') {
-        console.log('Gallery error:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: error.response?.data?.message || 'Process cancelled'
+        });
       }
     }
   };
@@ -184,7 +191,11 @@ const ProfileScreen = ({ navigation }) => {
       const response = await UpdateProfilePic(user?.student_id, imagePath);
       setProfilePic(response.data.profile_pic);
     } catch (error) {
-      console.log("Upload error", error.response);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response?.data?.message || 'Failed to upload data. Please try again.'
+      });
     }
   };
 
@@ -219,7 +230,11 @@ const ProfileScreen = ({ navigation }) => {
     try {
       await Linking.openURL(url);
     } catch (err) {
-      console.error("Failed to open URL:", err);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: err.response?.data?.message || 'Failed to load data. Please try again.'
+      });
     }
   };
 

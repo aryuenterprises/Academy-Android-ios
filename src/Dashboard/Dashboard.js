@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, FlatList, Text, Image, TouchableOpacity, StyleSheet, Dimensions, ImageBackground, RefreshControl } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { getDashboard, getNotifications, getSettings, getStudentProfile, refreshStudentProfile } from '../services/auth'; // Assuming you'll add getNotifications to your auth service
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +18,7 @@ import Logo from '../assets/component/logo.js';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomHeader from '../components/CustomHeader/CustomHeader';
 import { useAppTheme } from '../hook/useAppTheme';
+import Toast from 'react-native-toast-message';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -81,12 +82,33 @@ const StudentDashboard = () => {
   const { studentProfile, user, token } = useSelector(state => state.auth);
   const { theme, colors: themeColors, isDark, getColor } = useAppTheme(); // Use the theme hook
   const insets = useSafeAreaInsets();
-  useFocusEffect(
-    useCallback(() => {
-      fetchData();
-      fetchNotifications();
-      getStudentProfile(user.student_id);
-    }, []));
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     // fetchData();
+  //     fetchNotifications();
+  //     getStudentProfile(user.student_id);
+  //   }, []));
+
+  const isFocused = useIsFocused();
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Handle both initial mount and focus events
+  useEffect(() => {
+    if (isFocused) {
+      if (!hasMounted) {
+        fetchData();
+        fetchNotifications();
+        getStudentProfile(user.student_id);
+        setHasMounted(true); // ← THIS UPDATES THE STATE
+        getSettings();
+      } else {
+        // Subsequent focuses - only refresh notifications and settings
+        fetchNotifications();
+        getStudentProfile(user.student_id);
+      }
+    }
+  }, [isFocused, hasMounted]);
 
   const onRefresh = useCallback(() => {
     fetchData();
@@ -118,7 +140,11 @@ const StudentDashboard = () => {
       setData(response);
       await getSettings();
     } catch (error) {
-      console.log("error", error.response);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response?.data?.message || 'Failed to Load data. Please try again.'
+      });
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -132,7 +158,11 @@ const StudentDashboard = () => {
       const response = await getNotifications(); // You'll need to implement this in your auth service
       setNotifications(response.notifications || []);
     } catch (error) {
-      console.log("Error fetching notifications:", error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response?.data?.message || 'Error fetching notifications. Please try again.'
+      });
     } finally {
       setLoading(false);
     }

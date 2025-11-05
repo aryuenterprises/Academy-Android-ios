@@ -30,7 +30,6 @@ const storeTokens = async (token) => {
   try {
     storeAuthToken(token);
   } catch (error) {
-    console.error('Failed to store tokens:', error);
     throw new Error('Failed to save authentication data.');
   }
 };
@@ -70,7 +69,6 @@ export const Signup = async (username, email, ph_no, user_type, password) => {
       ...response.data // Include other response data if needed
     };
   } catch (error) {
-    console.error('Signup error:', error);
     store.dispatch(setError(error.response?.data || error.message));
     throw error.response?.data || error.message || 'Signup failed';
   }
@@ -109,8 +107,6 @@ export const addTrainersToChat = async (trainer_id, student_id) => {
     return response.data
   } catch (error) {
     store.dispatch(setError(error.response?.data || error.message));
-
-    console.error('Login error:', error);
     throw error.response?.data || error.message || 'Login failed';
   } finally {
     store.dispatch(setLoading(false)); // Reset loading state
@@ -183,8 +179,7 @@ export const checkAuth = async () => {
 
     return { token, user: decoded };
   } catch (error) {
-    console.error('Auth check error:', error);
-    await logout(); // Force logout if token is invalid
+    await logout();
     return null;
   }
 };
@@ -274,7 +269,6 @@ export const UpdateProfilePic = async (studentId, image) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching student profile:', error.response);
     throw error;
   }
 };
@@ -284,7 +278,6 @@ export const getDashboard = async () => {
     const response = await api.get(`${API_BASE_URL}/api/dashboard`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -294,7 +287,6 @@ export const getCourses = async (id) => {
     const response = await api.get(`${API_BASE_URL}/api/student_profile/${id}/courses`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching Courses:', error);
     throw error;
   }
 };
@@ -304,7 +296,6 @@ export const getNotifications = async () => {
     const response = await api.get(`${API_BASE_URL}/api/notifications`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching notifications:', error.response);
     throw error;
   }
 };
@@ -314,7 +305,6 @@ export const getAssignment = async (id) => {
     const response = await api.get(`${API_BASE_URL}/api/courses/${id}/assignments`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -324,7 +314,6 @@ export const getTopics = async (course_id, user) => {
     const response = await api.get(`${API_BASE_URL}/api/courses/${course_id}/topic/${user}/status`)
     return response.data;
   } catch (error) {
-    console.error('Error fetching getTopics profile:', error);
     throw error;
   }
 };
@@ -334,7 +323,6 @@ export const getSyllabus = async (course_id, user) => {
     const response = await api.get(`${API_BASE_URL}/api/courses/${course_id}`)
     return response.data;
   } catch (error) {
-    console.error('Error fetching getTopics profile:', error);
     throw error;
   }
 };
@@ -344,7 +332,6 @@ export const getSingleAssignment = async (id) => {
     const response = await api.get(`${API_BASE_URL}/api/assignments/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -354,7 +341,6 @@ export const getAssessment = async (id) => {
     const response = await api.get(`${API_BASE_URL}/api/test/course/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -364,7 +350,6 @@ export const getResults = async (testId, studentId) => {
     const response = await api.get(`${API_BASE_URL}/api/test/${testId}/student/${studentId}/result`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -374,7 +359,6 @@ export const getRecordings = async (id) => {
     const response = await api.get(`${API_BASE_URL}/api/recordings/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -395,7 +379,6 @@ export const getTrainers = async () => {
     const response = await api.get(`${API_BASE_URL}/api/chat/allama`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -405,7 +388,6 @@ export const fetchMessages = async (userId) => {
     const response = await api.get(`${API_BASE_URL}/api/chat/rooms/${userId}/euybfvh`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching dashboard profile:', error);
     throw error;
   }
 };
@@ -422,9 +404,7 @@ export const refreshStudentProfile = async () => {
     } else {
       return null;
     }
-
   } catch (error) {
-    console.error('Error refreshing student profile:', error);
     throw error;
   }
 };

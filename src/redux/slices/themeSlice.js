@@ -10,7 +10,6 @@ const loadThemeFromStorage = () => {
     const savedTheme = storage.getString('theme');
     return savedTheme || 'light';
   } catch (error) {
-    console.error('Error loading theme from storage:', error);
     return 'light';
   }
 };
@@ -20,7 +19,6 @@ const saveThemeToStorage = (theme) => {
   try {
     storage.set('theme', theme);
   } catch (error) {
-    console.error('Error saving theme to storage:', error);
     throw error;
   }
 };

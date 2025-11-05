@@ -1,9 +1,10 @@
 // utils/useFormFocusAdvanced.js
 import { useRef, useCallback } from 'react';
 import { Keyboard, findNodeHandle, UIManager } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 export const useFormFocusAdvanced = (onSubmit, scrollRef) => {
-  
+
   const inputRefs = useRef({});
 
   const registerInput = useCallback((name, ref) => {
@@ -12,7 +13,7 @@ export const useFormFocusAdvanced = (onSubmit, scrollRef) => {
 
   const focusNextInput = useCallback((currentField, fieldOrder) => {
     const currentIndex = fieldOrder.indexOf(currentField);
-    
+
     if (currentIndex === -1 || currentIndex === fieldOrder.length - 1) {
       // Last field - submit
       Keyboard.dismiss();
@@ -22,10 +23,10 @@ export const useFormFocusAdvanced = (onSubmit, scrollRef) => {
 
     const nextField = fieldOrder[currentIndex + 1];
     const nextInput = inputRefs.current[nextField];
-    
+
     if (nextInput) {
       nextInput.focus();
-      
+
       // Optional: Auto-scroll to the input (only if scrollRef is provided)
       if (scrollRef?.current && nextInput.measureLayout) {
         setTimeout(() => {
@@ -39,11 +40,19 @@ export const useFormFocusAdvanced = (onSubmit, scrollRef) => {
                 });
               },
               (error) => {
-                console.log('Scroll measurement failed:', error);
+                Toast.show({
+                  type: 'error',
+                  text1: 'Error',
+                  text2: error.response?.data?.message || 'Scroll measurement failed'
+                });
               }
             );
           } catch (error) {
-            console.log('Auto-scroll error:', error);
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: error.response?.data?.message || 'Auto-scroll error'
+            });
           }
         }, 100);
       }

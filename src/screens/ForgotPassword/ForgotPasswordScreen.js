@@ -26,11 +26,19 @@ import { useAuthAnimations } from '../../hook/useAuthAnimations';
 import GradientButton from '../../components/GradientButton/gradientButton';
 import { hp, moderateScale } from '../../utils/responsive';
 import { TextInput, Button } from 'react-native-paper';
+import { useFormFocusAdvanced } from '../../utils/useFormFocusAdvanced';
 
 const ForgotPasswordScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const { fadeAnim, logoPosition } = useAuthAnimations();
+    const scrollRef = useRef();
+    const fieldOrder = ['email'];
+
+    const { registerInput, focusNextInput } = useFormFocusAdvanced(
+        () => handleForgotPassword(),
+        scrollRef
+    );
 
     const handleForgotPassword = async () => {
         if (!email) {
@@ -85,7 +93,6 @@ const ForgotPasswordScreen = ({ navigation }) => {
                             placeholderTextColor="#999"
                             value={email}
                             onChangeText={setEmail}
-                            keyboardType="email-address"
                             autoCapitalize="none"
                             autoComplete="email"
                             theme={{
@@ -95,8 +102,15 @@ const ForgotPasswordScreen = ({ navigation }) => {
                                     placeholder: 'rgba(255,255,255,0.7)'
                                 }
                             }}
-                            underlineColor="transparent"
-                            underlineColorAndroid="transparent"
+                            // underlineColor="transparent"
+                            // underlineColorAndroid="transparent"
+                            ref={(ref) => registerInput('email', ref)}
+                            onSubmitEditing={() => focusNextInput('email', fieldOrder)}
+                            blurOnSubmit={false}
+                            keyboardType="email-address"
+                            returnKeyType="done"
+                            enablesReturnKeyAutomatically={true}
+                            importantForAutofill="yes"
                         />
                     </View>
                     <GradientButton

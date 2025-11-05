@@ -3,6 +3,7 @@ import React from 'react'
 import { hp, moderateScale, wp } from '../../utils/responsive'
 import { colors } from '../../utils/globalStyles'
 import { useAppTheme } from '../../hook/useAppTheme'
+import Toast from 'react-native-toast-message'
 
 const PaymentProgress = ({ route }) => {
     const { batch } = route.params || {}
@@ -24,18 +25,22 @@ const PaymentProgress = ({ route }) => {
     }
 
     const handleLinkPress = (url) => {
-        Linking.openURL(url).catch(err => 
-            console.error('Failed to open URL:', err)
+        Linking.openURL(url).catch(err =>
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: err.response?.data?.message || 'Failed to open URL'
+            })
         );
     }
 
     return (
-        <View style={[styles.container, {backgroundColor: themeColors.background}]}>
-            <View style={[styles.card, {backgroundColor: themeColors.card}]}>
+        <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+            <View style={[styles.card, { backgroundColor: themeColors.card }]}>
                 <View style={styles.progressContainer}>
                     <View style={styles.progressHeader}>
                         <Text style={styles.progressPercentage}>{paymentPercentage}% Paid</Text>
-                        <Text style={[styles.progressStatus, {color: themeColors.textGrey}]}>Partial Payment</Text>
+                        <Text style={[styles.progressStatus, { color: themeColors.textGrey }]}>Partial Payment</Text>
                     </View>
 
                     <View style={styles.progressBar}>
@@ -48,56 +53,56 @@ const PaymentProgress = ({ route }) => {
                     </View>
 
                     <View style={styles.paymentDetails}>
-                        <Text style={[styles.paymentText, {color: themeColors.textSecondary}]}>Amount Paid: ${amountPaid.toLocaleString()}</Text>
-                        <Text style={[styles.paymentText, {color: themeColors.textSecondary}]}>Balance: ${balance.toLocaleString()}</Text>
+                        <Text style={[styles.paymentText, { color: themeColors.textSecondary }]}>Amount Paid: ${amountPaid.toLocaleString()}</Text>
+                        <Text style={[styles.paymentText, { color: themeColors.textSecondary }]}>Balance: ${balance.toLocaleString()}</Text>
                     </View>
                 </View>
             </View>
 
             {/* Payment Details Section */}
-            <View style={[styles.paymentDetailsCard, {backgroundColor: themeColors.card}]}>
+            <View style={[styles.paymentDetailsCard, { backgroundColor: themeColors.card }]}>
                 <Text style={styles.sectionTitle}>Payment Details</Text>
-                
+
                 <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: themeColors.textSecondary}]}>Installment No:</Text>
-                    <Text style={[styles.detailValue, {color: themeColors.textSecondary}]}>{payment.installmentNo}</Text>
+                    <Text style={[styles.detailLabel, { color: themeColors.textSecondary }]}>Installment No:</Text>
+                    <Text style={[styles.detailValue, { color: themeColors.textSecondary }]}>{payment.installmentNo}</Text>
                 </View>
-                
+
                 <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: themeColors.textSecondary}]}>Due Date:</Text>
-                    <Text style={[styles.detailValue, {color: themeColors.textSecondary}]}>{payment.dueDate}</Text>
+                    <Text style={[styles.detailLabel, { color: themeColors.textSecondary }]}>Due Date:</Text>
+                    <Text style={[styles.detailValue, { color: themeColors.textSecondary }]}>{payment.dueDate}</Text>
                 </View>
-                
+
                 <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: themeColors.textSecondary}]}>Amount Due:</Text>
-                    <Text style={[styles.detailValue, {color: themeColors.textSecondary}]}>{payment.amountDue}</Text>
+                    <Text style={[styles.detailLabel, { color: themeColors.textSecondary }]}>Amount Due:</Text>
+                    <Text style={[styles.detailValue, { color: themeColors.textSecondary }]}>{payment.amountDue}</Text>
                 </View>
-                
+
                 <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: themeColors.textSecondary}]}>Amount Paid:</Text>
-                    <Text style={[styles.detailValue, {color: themeColors.textSecondary}]}>{payment.amountPaid}</Text>
+                    <Text style={[styles.detailLabel, { color: themeColors.textSecondary }]}>Amount Paid:</Text>
+                    <Text style={[styles.detailValue, { color: themeColors.textSecondary }]}>{payment.amountPaid}</Text>
                 </View>
-                
+
                 <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: themeColors.textSecondary}]}>Balance:</Text>
-                    <Text style={[styles.detailValue, {color: themeColors.textSecondary}]}>{payment.balance}</Text>
+                    <Text style={[styles.detailLabel, { color: themeColors.textSecondary }]}>Balance:</Text>
+                    <Text style={[styles.detailValue, { color: themeColors.textSecondary }]}>{payment.balance}</Text>
                 </View>
-                
+
                 <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: themeColors.textSecondary}]}>Payment Status:</Text>
-                    <Text style={[styles.detailValue, {color: themeColors.warning}]}>{payment.paymentStatus}</Text>
+                    <Text style={[styles.detailLabel, { color: themeColors.textSecondary }]}>Payment Status:</Text>
+                    <Text style={[styles.detailValue, { color: themeColors.warning }]}>{payment.paymentStatus}</Text>
                 </View>
 
                 {/* Action Buttons */}
                 <View style={styles.actionButtonsContainer}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={styles.actionButton}
                         onPress={() => handleLinkPress(payment.paymentLink)}
                     >
                         <Text style={styles.actionButtonText}>Make Payment</Text>
                     </TouchableOpacity>
-                    
-                    <TouchableOpacity 
+
+                    <TouchableOpacity
                         style={[styles.actionButton, styles.invoiceButton]}
                         onPress={() => handleLinkPress(payment.invoice)}
                     >
@@ -141,7 +146,7 @@ const styles = StyleSheet.create({
         fontSize: moderateScale(14),
         fontWeight: '600',
         color: colors.primary,
-                fontFamily: 'Manrope-SemiBold',
+        fontFamily: 'Manrope-SemiBold',
     },
     progressStatus: {
         fontSize: moderateScale(12),

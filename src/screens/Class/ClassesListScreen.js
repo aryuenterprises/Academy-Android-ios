@@ -14,6 +14,7 @@ import { useAppTheme } from '../../hook/useAppTheme';
 import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const getCurrentDate = () => {
   return moment().format('YYYY-MM-DD');
@@ -148,7 +149,11 @@ const ClassesListScreen = ({ navigation }) => {
       setSchedule(response.schedule || []);
       setIsCalendarReady(true);
     } catch (error) {
-      console.log("error", error.response);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response?.data?.message || 'Error fetching schedules. Please try again.'
+      });
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -205,10 +210,12 @@ const ClassesListScreen = ({ navigation }) => {
         student: user.student_id,
         batch: item.batch_id
       });
-      console.log("Attendance marked successfully");
     } catch (error) {
-      console.log("Failed to mark attendance:", error);
-      // Continue even if attendance fails
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response?.data?.message || 'Failed to mark attendance'
+      });
     }
   };
 
@@ -222,7 +229,6 @@ const ClassesListScreen = ({ navigation }) => {
   };
 
   const handleJoinMeet = useCallback(async (item) => {
-    console.log("item", item)
     if (!item?.class_link || item.class_link === "NA" || item.class_link === "join meeting") {
       alert("No meeting link available");
       return;
@@ -232,20 +238,22 @@ const ClassesListScreen = ({ navigation }) => {
       // Mark attendance in background (don't wait for it to complete)
       if (!item.attendance_status) {
         markAttendance(item);
-        console.log("marking attendance")
       }
 
       // Open meeting immediately
       await openMeetingLink(item.class_link);
 
     } catch (error) {
-      console.log("Error opening Google Meet:", error);
-      alert("Cannot open Google Meet link. Please check the link or install Google Meet app.");
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response?.data?.message || 'Cannot open Google Meet link. Please check the link or install Google Meet app.'
+      });
     }
   }, [user?.student_id, automatic]);
   const completedCount = schedule.filter(item => item.status === "completed").length;
   const ongoingClass = schedule.find(item => item.status === "ongoing");
-  
+
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
@@ -256,7 +264,6 @@ const ClassesListScreen = ({ navigation }) => {
   };
 
   const renderClassItem = ({ item, index }) => {
-    console.log("first", item)
     return (
       <View style={[
         globalstyles.card,

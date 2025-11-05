@@ -24,6 +24,7 @@ import { useAuthAnimations } from '../../hook/useAuthAnimations';
 import { TextInput } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import GradientButton from '../../components/GradientButton/gradientButton';
+import { useFormFocusAdvanced } from '../../utils/useFormFocusAdvanced';
 
 const ResetPasswordScreen = ({ route, navigation }) => {
     const { email } = route.params;
@@ -35,6 +36,13 @@ const ResetPasswordScreen = ({ route, navigation }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const { fadeAnim, logoPosition } = useAuthAnimations();
+    const scrollRef = useRef();
+    const fieldOrder = ['password', 'confirmPassword'];
+
+    const { registerInput, focusNextInput } = useFormFocusAdvanced(
+        () => handleResetPassword(),
+        scrollRef
+    );
 
     const handleResetPassword = async () => {
         const { newPassword, confirmPassword } = formData;
@@ -132,6 +140,11 @@ const ResetPasswordScreen = ({ route, navigation }) => {
                             }}
                             underlineColor="transparent"
                             underlineColorAndroid="transparent"
+                            ref={(ref) => registerInput('password', ref)}
+                            onSubmitEditing={() => focusNextInput('password', fieldOrder)}
+                            returnKeyType="next"
+                            enablesReturnKeyAutomatically={true}
+                            importantForAutofill="yes"
                             right={
                                 <TextInput.Icon
                                     icon={({ size, color }) => (
@@ -151,7 +164,6 @@ const ResetPasswordScreen = ({ route, navigation }) => {
                         <Text style={globalstyles.inputLabel}>Confirm Password</Text>
                         <TextInput
                             mode="flat"
-                            autoFocus={true}
                             textColor='#ddd'
                             style={[globalstyles.input, { color: "#fff" }]}
                             placeholder="Confirm new password"
@@ -160,6 +172,12 @@ const ResetPasswordScreen = ({ route, navigation }) => {
                             onChangeText={value => updateFormData('confirmPassword', value)}
                             secureTextEntry={!showConfirmPassword}
                             autoCapitalize="none"
+
+                            ref={(ref) => registerInput('confirmPassword', ref)}
+                            onSubmitEditing={() => focusNextInput('confirmPassword', fieldOrder)}
+                            returnKeyType="done"
+                            enablesReturnKeyAutomatically={true}
+                            importantForAutofill="yes"
                             right={
                                 <TextInput.Icon
                                     icon={({ size, color }) => (

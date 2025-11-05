@@ -145,11 +145,19 @@ const CustomDrawerContent = (props) => {
                 const response = await UpdateProfilePic(user?.student_id, croppedImage.path);
                 setProfilePic(response.data.profile_pic);
             } catch (error) {
-                console.log("error", error.response);
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+                });
             }
         } catch (error) {
             if (error.code !== 'E_PICKER_CANCELLED') {
-                console.log('Image picker error:', error);
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+                });
             }
         }
     };
@@ -162,7 +170,6 @@ const CustomDrawerContent = (props) => {
         try {
             await Linking.openURL(url);
         } catch (err) {
-            console.error("Failed to open URL:", err);
             Toast.show({
                 type: 'error',
                 text1: 'Error',
@@ -175,7 +182,11 @@ const CustomDrawerContent = (props) => {
     const handleJobPortalPress = (portal) => {
         if (portal.link) {
             Linking.openURL(portal.link).catch(err =>
-                console.error('Failed to open URL:', err)
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: err.response?.data?.message || 'please try again'
+                })
             );
         }
     };

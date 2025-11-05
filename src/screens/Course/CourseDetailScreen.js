@@ -78,7 +78,7 @@ const FeedbackModalComponent = ({
             visible={visible}
             onRequestClose={onRequestClose}
         >
-            <KeyboardAvoidingView 
+            <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={globalstyles.keyboardAvoidingView}
             >
@@ -117,7 +117,7 @@ const FeedbackModalComponent = ({
                                         <View style={{ width: 60 }} />
                                     </View>
 
-                                    <ScrollView 
+                                    <ScrollView
                                         style={styles.modalScrollView}
                                         contentContainerStyle={globalstyles.modalScrollContent}
                                         showsVerticalScrollIndicator={false}
@@ -218,7 +218,11 @@ const CourseDetailsScreen = ({ route, navigation }) => {
             const response = await getAssignment(globalCourseId)
             setExercises(response.data);
         } catch (error) {
-            console.error('Error fetching exercises:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             if (!isRefreshing) setLoading(false);
         }
@@ -242,7 +246,11 @@ const CourseDetailsScreen = ({ route, navigation }) => {
                         await fetchSyllabus()
                     }
                 } catch (error) {
-                    console.error('Error in useFocusEffect:', error);
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error',
+                        text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+                    });
                 }
             };
 
@@ -261,7 +269,11 @@ const CourseDetailsScreen = ({ route, navigation }) => {
             const response = await getAssessment(globalCourseId)
             setAssessments(response.tests);
         } catch (error) {
-            console.error('Error fetching assessments:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             if (!isRefreshing) setLoading(false);
         }
@@ -271,11 +283,14 @@ const CourseDetailsScreen = ({ route, navigation }) => {
         if (!isRefreshing) setLoading(true);
         try {
             const response = await getTopics(globalCourseId, user.student_id)
-            console.log("response", response)
             setTopics(response.all_topics);
             setResult(response.completed_topics);
         } catch (error) {
-            console.error('Error fetching response:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             if (!isRefreshing) setLoading(false);
         }
@@ -287,12 +302,16 @@ const CourseDetailsScreen = ({ route, navigation }) => {
             const response = await getSyllabus(globalCourseId, user.student_id)
             setSyllabus(response);
         } catch (error) {
-            console.error('Error fetching response:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             if (!isRefreshing) setLoading(false);
         }
     };
-    
+
     // Refresh function for each tab
     const handleRefresh = async () => {
         setRefreshing(true);
@@ -314,7 +333,11 @@ const CourseDetailsScreen = ({ route, navigation }) => {
                     break;
             }
         } catch (error) {
-            console.error('Error refreshing data:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             setRefreshing(false);
         }
@@ -368,7 +391,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
             });
             return response.data;
         } catch (error) {
-            console.error('Error submitting feedback:', error);
             Toast.show({
                 type: 'error',
                 text1: 'Error',
@@ -887,7 +909,7 @@ const CourseDetailsScreen = ({ route, navigation }) => {
 
     return (
         <View style={[globalstyles.container, { paddingHorizontal: 0, backgroundColor: themeColors.background }]}>
-            <StatusBar barStyle={"light-content"}/>
+            <StatusBar barStyle={"light-content"} />
             <CourseHeader />
             <TabView
                 navigationState={{ index, routes }}

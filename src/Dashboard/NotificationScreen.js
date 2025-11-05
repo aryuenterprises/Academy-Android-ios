@@ -12,6 +12,7 @@ import { hp, moderateScale } from '../utils/responsive'
 import { store } from '../redux/store'
 import { setGlobalCourseId } from '../redux/slices/authSlice'
 import { useAppTheme } from '../hook/useAppTheme'
+import Toast from 'react-native-toast-message'
 
 const NotificationScreen = ({ route, navigation }) => {
     const [notifications, setNotifications] = useState([]);
@@ -27,7 +28,11 @@ const NotificationScreen = ({ route, navigation }) => {
             const response = await getNotifications(); // You'll need to implement this in your auth service
             setNotifications(response.notifications || []);
         } catch (error) {
-            console.log("Error fetching notifications:", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Error fetching notifications'
+            });
         } finally {
             setLoading(false);
         }
@@ -66,8 +71,6 @@ const NotificationScreen = ({ route, navigation }) => {
     )
 
     const handleNotificationPress = async (item) => {
-        console.log("item?.message?.toLowerCase()", item)
-        return
         try {
             const response = await api.post(`${API_BASE_URL}/api/notifications/mark_read`, {
                 id: item?.id
@@ -83,7 +86,7 @@ const NotificationScreen = ({ route, navigation }) => {
                         screen: 'TaskDetail',
                         params: { itemId: item.assignment_id }
                     });
-                } 
+                }
                 // else if (item?.message?.toLowerCase()?.includes("test_result")) {
                 //     store.dispatch(setGlobalCourseId(item.course_id));
                 //     navigation.navigate('Course', {
@@ -93,7 +96,6 @@ const NotificationScreen = ({ route, navigation }) => {
                 // }
             }
         } catch (error) {
-            console.error('Error fetching notifications:', error.response);
             throw error;
         }
     }

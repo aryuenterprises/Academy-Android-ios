@@ -24,6 +24,7 @@ import CustomHeader from '../../components/CustomHeader/CustomHeader';
 import { setGlobalCourseId, ClearGlobalCourseId } from '../../redux/slices/authSlice';
 import { store } from '../../redux/store';
 import { useAppTheme } from '../../hook/useAppTheme';
+import Toast from 'react-native-toast-message';
 
 const CourseListSkeleton = ({ theme }) => (
     <SkeletonPlaceholder
@@ -121,7 +122,11 @@ const CourseListScreen = () => {
             const response = await getCourses(user.student_id);
             setCourses(response.data || []);
         } catch (error) {
-            console.log("error", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             setLoading(false);
             setRefreshing(false);

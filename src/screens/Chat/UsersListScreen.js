@@ -55,7 +55,11 @@ const UsersListScreen = ({ navigation }) => {
       setRoom(responce.chat_rooms)
       setFilteredUsers(responce.chat_rooms);
     } catch (error) {
-      console.log("error", error)
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+      });
     } finally {
       setRefreshing(false)
     }
@@ -65,11 +69,9 @@ const UsersListScreen = ({ navigation }) => {
     if (searchQuery.trim() === '') {
       setFilteredUsers(room);
     } else {
-      console.log("room", room)
-      const filtered = room.filter(user => 
+      const filtered = room.filter(user =>
         user?.trainer_name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-    console.log("first", filtered)
       setFilteredUsers(filtered);
     }
   }, [searchQuery, trainer]);
@@ -111,7 +113,6 @@ const UsersListScreen = ({ navigation }) => {
         }
       }
     } catch (error) {
-      console.error('Error formatting date:', error);
       return ''; // Return empty string if date parsing fails
     }
   };

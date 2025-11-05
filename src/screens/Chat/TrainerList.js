@@ -71,7 +71,6 @@ const TrainerList = ({ navigation, route }) => {
             await addTrainersToChat(selectedTrainers[0], user.registration_id)
             navigation.goBack()
         } catch (error) {
-            console.log("Error adding trainers:", error)
             Toast.show({
                 type: 'error',
                 text1: 'Error',

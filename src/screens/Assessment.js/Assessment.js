@@ -62,7 +62,11 @@ const Assessment = ({ navigation, route }) => {
             const matchedResults = response.tests.find((item) => item.test_id === test_id);
             setAssessments(matchedResults);
         } catch (error) {
-            console.error('Error fetching assessments:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             setLoading(false);
         }
@@ -73,7 +77,6 @@ const Assessment = ({ navigation, route }) => {
         try {
             setLoading(true);
             const response = await getResults(test_id, user.student_id);
-            console.log("Existing results:", response);
 
             if (response && response.success) {
                 setResult(response);
@@ -87,12 +90,15 @@ const Assessment = ({ navigation, route }) => {
                             existingAnswers[question.question_id] = question.student_answer;
                         }
                     });
-                    console.log("existingAnswers", existingAnswers)
                     setAnswers(existingAnswers);
                 }
             }
         } catch (error) {
-            console.log("No existing results found or error:", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Upload Failed',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             setLoading(false);
         }
@@ -448,7 +454,6 @@ const Assessment = ({ navigation, route }) => {
             const response = await api.post(`${API_BASE_URL}/api/answers`, answersData);
 
             if (response.data.success) {
-                console.log('All answers submitted successfully:', response.data.message);
 
                 // Fetch and display results
                 const resultsResponse = await getResults(test_id, user.student_id);
@@ -462,7 +467,6 @@ const Assessment = ({ navigation, route }) => {
                 });
                 navigation.goBack()
             } else {
-                console.log('Failed to submit answers:', response.data.message);
                 setError('Failed to submit answers. Please try again.');
                 Toast.show({
                     type: 'error',
@@ -471,7 +475,6 @@ const Assessment = ({ navigation, route }) => {
                 });
             }
         } catch (err) {
-            console.error('Error submitting assessment:', err);
             Toast.show({
                 type: 'error',
                 text1: 'Error',

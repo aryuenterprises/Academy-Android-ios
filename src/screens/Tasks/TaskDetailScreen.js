@@ -187,7 +187,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
             setDescription(response.description || '');
             setTitle(response.title || '');
         } catch (error) {
-            console.error('Error fetching exercises:', error);
             Toast.show({
                 type: 'error',
                 text1: 'Error',
@@ -230,11 +229,9 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                     includeExif: true,
                     waitAnimationEnd: false
                 }).catch(error => {
-                    console.log('ImagePicker Error:', error);
                     throw error;
                 });
 
-                console.log('Selected image:', image);
                 if (image) {
                     setAttachments(prev => [...prev, {
                         id: Date.now(),
@@ -268,11 +265,14 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                         name: res[0].name
                     }]);
                 } catch (err) {
-                    console.error("DocumentPicker error:", err);
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error',
+                        text2: 'DocumentPicker error'
+                    });
                 }
             }
         } catch (error) {
-            console.log('Attachment error:', error);
             // Check for specific error types
             if (error.code === 'E_PICKER_CANCELLED') {
                 Toast.show({
@@ -304,8 +304,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
             return;
         }
 
-        console.log("Original URL:", url);
-
         // Fix 1: Ensure URL is properly formatted
         let formattedUrl = url;
 
@@ -322,7 +320,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
         try {
             // Fix 2: Check if URL can be opened
             const supported = await Linking.canOpenURL(formattedUrl);
-            console.log("Can open URL:", supported, formattedUrl);
 
             if (supported) {
                 await Linking.openURL(formattedUrl);
@@ -330,7 +327,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                 await handleAlternativeFileOpening(formattedUrl, url);
             }
         } catch (error) {
-            console.error('Error opening URL:', error);
             Toast.show({
                 type: 'error',
                 text1: 'Error',
@@ -354,7 +350,11 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                         return;
                     }
                 } catch (e) {
-                    console.log('Google Docs fallback failed:', e);
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error',
+                        text2: 'Google Docs fallback failed'
+                    });
                 }
                 break;
 
@@ -364,7 +364,11 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                     await Linking.openURL(formattedUrl);
                     return;
                 } catch (e) {
-                    console.log('Direct image open failed:', e);
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error',
+                        text2: 'Direct image open failed'
+                    });
                 }
                 break;
         }
@@ -396,7 +400,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                 text2: 'File download started'
             });
         } catch (error) {
-            console.error('Download error:', error);
             Toast.show({
                 type: 'error',
                 text1: 'Error',
@@ -480,16 +483,9 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                     // Android often uses content:// URIs which need special handling
                     if (fileUri.startsWith('content://')) {
                         // You might need react-native-document-picker or similar for content URIs
-                        console.log('Content URI detected - may need special handling');
+                        // console.log('Content URI detected - may need special handling');
                     }
                 }
-
-                console.log("File details:", {
-                    uri: fileUri,
-                    type: mimeType,
-                    name: attachment.name || `upload_${Date.now()}.${ext}`,
-                    ext: ext
-                });
 
                 // Append file to FormData - React Native specific format
                 formData.append('file', {
@@ -499,7 +495,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                 });
             }
 
-            console.log("FormData prepared for upload");
 
             const response = await api.post(`${API_BASE_URL}/api/submissions`, formData, {
                 headers: {
@@ -528,14 +523,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
             }, 100);
 
         } catch (error) {
-            console.error('Error adding submission:', error);
-            console.log('Full error:', {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status,
-                headers: error.response?.headers
-            });
-
             Toast.show({
                 type: 'error',
                 text1: 'Upload Failed',
@@ -573,7 +560,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
             setShowEmojiPicker(true);
             animateEmoji();
         } catch (error) {
-            console.error('Error in toggleEmojiPicker:', error);
             setShowEmojiPicker(false);
             setActiveEmojiPicker(null);
         }
@@ -612,7 +598,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                 });
             }
         } catch (error) {
-            console.log("error", error);
             Toast.show({
                 type: 'error',
                 text1: 'Error',
@@ -742,7 +727,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
             );
         }
 
-        console.log("description", description);
 
         // Check if the HTML is double-encoded (contains &lt; and &gt;)
         const isDoubleEncoded = description.includes('&lt;') && description.includes('&gt;');

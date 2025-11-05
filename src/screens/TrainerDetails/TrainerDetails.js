@@ -8,10 +8,10 @@ import { formatDateTime } from '../../utils/formatDate';
 import capitalizeFirstLetter from '../../utils/capitalizeFirstLetter';
 import { useScrollDetection } from '../../hook/useScrollDetection';
 import { useAppTheme } from '../../hook/useAppTheme';
+import Toast from 'react-native-toast-message';
 
 const TrainerDetails = ({ route }) => {
     const { batch } = route.params || {};
-    console.log("batch", batch)
     const { user } = useSelector(state => state.auth);
     const { handleScroll, createAnimatedScrollView } = useScrollDetection();
     const AnimatedFlatList = createAnimatedScrollView(FlatList);
@@ -31,7 +31,11 @@ const TrainerDetails = ({ route }) => {
             await new Promise(resolve => setTimeout(resolve, 1000));
 
         } catch (error) {
-            console.log("error", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.response?.data?.message || 'Failed to load data. Please try again.'
+            });
         } finally {
             setLoading(false);
             setRefreshing(false);

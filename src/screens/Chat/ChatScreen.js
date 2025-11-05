@@ -70,7 +70,6 @@ const ChatScreen = ({ navigation, route }) => {
         setMessages(formattedMessages);
       }
     } catch (error) {
-      console.error('Error fetching messages:', error);
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -92,7 +91,6 @@ const ChatScreen = ({ navigation, route }) => {
     ws.current = new WebSocket(wsUrl);
 
     ws.current.onopen = () => {
-      console.log('WebSocket connected');
       setIsConnected(true);
 
       // Authenticate with token
@@ -129,15 +127,19 @@ const ChatScreen = ({ navigation, route }) => {
         // Handle other message types
         else if (data.type === 'user_joined') {
           console.log('User joined:', data.user_id);
+
         }
 
       } catch (error) {
-        console.error('Error parsing message:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Upload Failed',
+          text2: error.response?.data?.message || 'Error parsing message. Please try again.'
+        });
       }
     };
 
     ws.current.onerror = (error) => {
-      console.log('WebSocket error:', error);
       setIsConnected(false);
     };
 
@@ -147,14 +149,12 @@ const ChatScreen = ({ navigation, route }) => {
         setTimeout(() => {
           if (!item?.id || !token) return;
           // Reinitialize connection
-          console.log('Attempting to reconnect WebSocket...');
           setIsConnected(true);
         }, 3000);
       }
     };
 
     ws.current.onclose = (e) => {
-      console.log('WebSocket closed:', e.code, e.reason);
       setIsConnected(false);
       handleReconnect();
     };
@@ -216,7 +216,11 @@ const ChatScreen = ({ navigation, route }) => {
       try {
         await MarkAsRead(item.id, user);
       } catch (error) {
-        console.error('Error marking messages as read:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: error.response?.data?.message || 'Error marking messages as read. Please try again.'
+        });
       }
 
       // Scroll to bottom
@@ -225,7 +229,6 @@ const ChatScreen = ({ navigation, route }) => {
       }, 100);
 
     } catch (error) {
-      console.error('Error sending message:', error.response.data);
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -242,60 +245,60 @@ const ChatScreen = ({ navigation, route }) => {
     }
   };
 
-const renderMessage = ({ item }) => {
-  // const { colors: themeColors } = useAppTheme();
-  
-  return (
-    <View style={[
-      styles.messageContainer,
-      item.isOwn ? styles.ownMessageContainer : styles.otherMessageContainer
-    ]}>
+  const renderMessage = ({ item }) => {
+    // const { colors: themeColors } = useAppTheme();
+
+    return (
       <View style={[
-        styles.messageBubble,
-        item.isOwn ? 
-          [styles.ownMessageBubble, { backgroundColor: themeColors.primary }] : 
-          [styles.otherMessageBubble, { 
-            backgroundColor: themeColors.card, 
-            borderColor: themeColors.lightGray 
-          }]
+        styles.messageContainer,
+        item.isOwn ? styles.ownMessageContainer : styles.otherMessageContainer
       ]}>
-        <Text style={[
-          styles.messageText,
-          item.isOwn ? 
-            styles.ownMessageText : 
-            [styles.otherMessageText, { color: themeColors.textPrimary }]
+        <View style={[
+          styles.messageBubble,
+          item.isOwn ?
+            [styles.ownMessageBubble, { backgroundColor: themeColors.primary }] :
+            [styles.otherMessageBubble, {
+              backgroundColor: themeColors.card,
+              borderColor: themeColors.lightGray
+            }]
         ]}>
-          {item.text}
-        </Text>
-        <View style={styles.messageMeta}>
           <Text style={[
-            styles.timestamp,
-            item.isOwn ? 
-              styles.ownTimestamp : 
-              [styles.otherTimestamp, { color: themeColors.textSecondary }]
+            styles.messageText,
+            item.isOwn ?
+              styles.ownMessageText :
+              [styles.otherMessageText, { color: themeColors.textPrimary }]
           ]}>
-            {format(item.timestamp, 'h:mm a')}
+            {item.text}
           </Text>
-          {item.isOwn && (
-            <View style={styles.statusContainer}>
-              {item.isSending ? (
-                <ActivityIndicator size="small" color={themeColors.textSecondary} />
-              ) : item.failed ? (
-                <Ionicons name="warning" size={14} color={themeColors.error} />
-              ) : (
-                <Ionicons 
-                  name="checkmark-done" 
-                  size={14} 
-                  color={themeColors.textSecondary} 
-                />
-              )}
-            </View>
-          )}
+          <View style={styles.messageMeta}>
+            <Text style={[
+              styles.timestamp,
+              item.isOwn ?
+                styles.ownTimestamp :
+                [styles.otherTimestamp, { color: themeColors.textSecondary }]
+            ]}>
+              {format(item.timestamp, 'h:mm a')}
+            </Text>
+            {item.isOwn && (
+              <View style={styles.statusContainer}>
+                {item.isSending ? (
+                  <ActivityIndicator size="small" color={themeColors.textSecondary} />
+                ) : item.failed ? (
+                  <Ionicons name="warning" size={14} color={themeColors.error} />
+                ) : (
+                  <Ionicons
+                    name="checkmark-done"
+                    size={14}
+                    color={themeColors.textSecondary}
+                  />
+                )}
+              </View>
+            )}
+          </View>
         </View>
       </View>
-    </View>
-  );
-};
+    );
+  };
 
   const renderHeader = () => {
     if (isLoading) {
