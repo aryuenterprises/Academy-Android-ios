@@ -9,12 +9,13 @@ import { getAuthToken, removeAuthToken } from './auth';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 10000,
+    timeout: 30000
 });
 
 // Request interceptor: Attach token
 api.interceptors.request.use(
     async (config) => {
+        // config.headers['Content-Type'] = 'application/json';
         const token = getAuthToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;

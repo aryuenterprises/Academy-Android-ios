@@ -1,5 +1,5 @@
 # ninja log v5
-1	31	7840317180371758	D:/Joel/AryuAcademy/android/app/.cxx/Debug/v2q13g2g/x86_64/CMakeFiles/cmake.verify_globs	4f541a68f70481fa
+1	34	0	D:/Joel/AryuAcademy/android/app/.cxx/Debug/v2q13g2g/x86_64/CMakeFiles/cmake.verify_globs	4f541a68f70481fa
 48216	57434	7838673653662914	rnscreens_autolinked_build/CMakeFiles/react_codegen_rnscreens.dir/46a90db923514d91c3bb206477b274f5/common/cpp/react/renderer/components/rnscreens/RNSScreenStackHeaderSubviewShadowNode.cpp.o	76401ed0d88c8454
 47696	54772	7838673627062938	rnscreens_autolinked_build/CMakeFiles/react_codegen_rnscreens.dir/46a90db923514d91c3bb206477b274f5/common/cpp/react/renderer/components/rnscreens/RNSScreenStackHeaderConfigState.cpp.o	e56b1159481d6f45
 43281	46360	7838673542862903	RNMmkvSpec_cxxmodule_autolinked_build/core/CMakeFiles/core.dir/ThreadLock.cpp.o	30b04021895f0a1b
@@ -166,14 +166,8 @@
 63592	77646	7838673855182935	rnsvg_autolinked_build/CMakeFiles/react_codegen_rnsvg.dir/baf223170c071d4a9d8833064b0cb82c/android/build/generated/source/codegen/jni/react/renderer/components/rnsvg/Props.cpp.o	7ed998dd82ba863d
 77647	77957	7838673858692889	D:/Joel/AryuAcademy/android/app/build/intermediates/cxx/Debug/v2q13g2g/obj/x86_64/libreact_codegen_rnsvg.so	7aeb9b82cfe21621
 107156	113313	7838674212256021	D:/Joel/AryuAcademy/android/app/build/intermediates/cxx/Debug/v2q13g2g/obj/x86_64/libappmodules.so	b707c13c0d1c2cfb
-0	14	0	clean	22c91d2d7d3c19b3
-38	1229	7840317184481754	build.ninja	c802f34d4c22f02
-32	523	7840317184481754	build.ninja	c802f34d4c22f02
-1	30	0	D:/Joel/AryuAcademy/android/app/.cxx/Debug/v2q13g2g/x86_64/CMakeFiles/cmake.verify_globs	4f541a68f70481fa
-0	6	0	clean	22c91d2d7d3c19b3
-1	23	0	D:/Joel/AryuAcademy/android/app/.cxx/Debug/v2q13g2g/x86_64/CMakeFiles/cmake.verify_globs	4f541a68f70481fa
-0	6	0	clean	22c91d2d7d3c19b3
-1	22	0	D:/Joel/AryuAcademy/android/app/.cxx/Debug/v2q13g2g/x86_64/CMakeFiles/cmake.verify_globs	4f541a68f70481fa
-0	7	0	clean	22c91d2d7d3c19b3
-1	21	0	D:/Joel/AryuAcademy/android/app/.cxx/Debug/v2q13g2g/x86_64/CMakeFiles/cmake.verify_globs	4f541a68f70481fa
-0	6	0	clean	22c91d2d7d3c19b3
+0	15	0	clean	22c91d2d7d3c19b3
+38	1164	7845634203282986	build.ninja	c802f34d4c22f02
+34	988	7845634203282986	build.ninja	c802f34d4c22f02
+1	25	0	D:/Joel/AryuAcademy/android/app/.cxx/Debug/v2q13g2g/x86_64/CMakeFiles/cmake.verify_globs	4f541a68f70481fa
+0	15	0	clean	22c91d2d7d3c19b3

@@ -1,7 +1,7 @@
 # ninja log v5
 13684	24333	7838639078706436	rnscreens_autolinked_build/CMakeFiles/react_codegen_rnscreens.dir/46a90db923514d91c3bb206477b274f5/common/cpp/react/renderer/components/rnscreens/RNSScreenShadowNode.cpp.o	83838d286b190092
 7210	13684	7838638972626407	pagerview_autolinked_build/CMakeFiles/react_codegen_pagerview.dir/react/renderer/components/pagerview/EventEmitters.cpp.o	f0e92cb22dc7738d
-2	26	7840317207437190	D:/Joel/AryuAcademy/android/app/.cxx/RelWithDebInfo/3z6cm5a1/x86_64/CMakeFiles/cmake.verify_globs	ecdcab7e5541e392
+2	34	0	D:/Joel/AryuAcademy/android/app/.cxx/RelWithDebInfo/3z6cm5a1/x86_64/CMakeFiles/cmake.verify_globs	ecdcab7e5541e392
 86	3135	7838638868376393	RNMmkvSpec_cxxmodule_autolinked_build/core/CMakeFiles/core.dir/MemoryFile_Linux.cpp.o	d2dc88baf34d0656
 9675	16881	7838639005126411	rnreanimated_autolinked_build/CMakeFiles/react_codegen_rnreanimated.dir/rnreanimated-generated.cpp.o	bcf9116e308283a4
 52	2683	7838638862436388	RNMmkvSpec_cxxmodule_autolinked_build/core/CMakeFiles/core.dir/InterProcessLock_Win32.cpp.o	18bd098dc7562995
@@ -166,14 +166,8 @@
 106181	133326	7838640170228632	rnsvg_autolinked_build/CMakeFiles/react_codegen_rnsvg.dir/baf223170c071d4a9d8833064b0cb82c/android/build/generated/source/codegen/jni/react/renderer/components/rnsvg/Props.cpp.o	52621115279af11f
 133327	133438	7838640171798622	D:/Joel/AryuAcademy/android/app/build/intermediates/cxx/RelWithDebInfo/3z6cm5a1/obj/x86_64/libreact_codegen_rnsvg.so	f491e5bdca226b66
 133439	133905	7838640175618613	D:/Joel/AryuAcademy/android/app/build/intermediates/cxx/RelWithDebInfo/3z6cm5a1/obj/x86_64/libappmodules.so	732ac271e3f50933
-0	14	0	clean	22c91d2d7d3c19b3
-38	970	7840317211375445	build.ninja	83092d0037026c8b
-26	511	7840317211375445	build.ninja	83092d0037026c8b
-1	29	0	D:/Joel/AryuAcademy/android/app/.cxx/RelWithDebInfo/3z6cm5a1/x86_64/CMakeFiles/cmake.verify_globs	ecdcab7e5541e392
-0	7	0	clean	22c91d2d7d3c19b3
-1	28	0	D:/Joel/AryuAcademy/android/app/.cxx/RelWithDebInfo/3z6cm5a1/x86_64/CMakeFiles/cmake.verify_globs	ecdcab7e5541e392
-0	7	0	clean	22c91d2d7d3c19b3
-1	22	0	D:/Joel/AryuAcademy/android/app/.cxx/RelWithDebInfo/3z6cm5a1/x86_64/CMakeFiles/cmake.verify_globs	ecdcab7e5541e392
-0	7	0	clean	22c91d2d7d3c19b3
-1	21	0	D:/Joel/AryuAcademy/android/app/.cxx/RelWithDebInfo/3z6cm5a1/x86_64/CMakeFiles/cmake.verify_globs	ecdcab7e5541e392
-0	6	0	clean	22c91d2d7d3c19b3
+1	16	0	clean	22c91d2d7d3c19b3
+28	1029	7845634231294000	build.ninja	83092d0037026c8b
+34	939	7845634231294000	build.ninja	83092d0037026c8b
+1	24	0	D:/Joel/AryuAcademy/android/app/.cxx/RelWithDebInfo/3z6cm5a1/x86_64/CMakeFiles/cmake.verify_globs	ecdcab7e5541e392
+0	15	0	clean	22c91d2d7d3c19b3

@@ -25,6 +25,7 @@ import { TextInput } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import GradientButton from '../../components/GradientButton/gradientButton';
 import { useFormFocusAdvanced } from '../../utils/useFormFocusAdvanced';
+import { smartPreload } from '../../utils/smartPreload';
 
 const ResetPasswordScreen = ({ route, navigation }) => {
     const { email } = route.params;
@@ -76,7 +77,7 @@ const ResetPasswordScreen = ({ route, navigation }) => {
 
         setLoading(true);
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/reset-password`, {
+            const response = await axios.post(`${API_BASE_URL}/api/reset-password/`, {
                 email: email,
                 new_password: newPassword,
             });
@@ -87,6 +88,7 @@ const ResetPasswordScreen = ({ route, navigation }) => {
                     text1: 'Success',
                     text2: 'Password successfully changed'
                 });
+                smartPreload('Login')
                 navigation.navigate('Login');
             }
         } catch (error) {
@@ -97,6 +99,8 @@ const ResetPasswordScreen = ({ route, navigation }) => {
             });
         } finally {
             setLoading(false);
+            smartPreload('Login')
+            navigation.navigate('Login');
         }
     };
 

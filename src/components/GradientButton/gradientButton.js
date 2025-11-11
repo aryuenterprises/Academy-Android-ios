@@ -11,9 +11,10 @@ const GradientButton = ({
   style,
   textStyle,
   disable,
+  onPressIn,
 }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.button, style]} disabled={disable}>
+    <TouchableOpacity onPress={onPress} style={[styles.button, style]} onPressIn={onPressIn} disabled={disable}>
       <LinearGradient
         colors={colors}
         style={styles.gradient}

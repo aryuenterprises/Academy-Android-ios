@@ -7,6 +7,7 @@ import { setAuthData, setStudentProfile, clearAuthData, setLoading, setError, cl
 import { API_BASE_URL } from '@env'
 import { storage, Storage } from '../utils/storage'; // Import MMKV storage
 import { resetTheme } from '../redux/slices/themeSlice';
+import { smartPreload } from '../utils/smartPreload';
 
 // import { API_BASE_URL } from 'react-native-config'
 
@@ -187,6 +188,7 @@ export const checkAuth = async () => {
 // 5. LOGOUT - Updated with navigation
 export const logout = async () => {
   try {
+    smartPreload('Login');
     resetToAuth(); // Navigate to auth screen
     removeAuthToken();
     store.dispatch(clearAuthData()); // Clear Redux state
@@ -239,11 +241,13 @@ export const attendanceService = {
 //  Student Profile
 export const getStudentProfile = async (studentId) => {
   try {
-    const response = await api.get(`${API_BASE_URL}/api/student_profile/${studentId}`);
+    const response = await api.get(`${API_BASE_URL}/api/student_profile/${studentId}`
+    );
     const profileData = response.data;
     store.dispatch(setStudentProfile(profileData));
     return profileData;
   } catch (error) {
+    console.log("error", error);
     throw error;
   }
 };
@@ -285,7 +289,6 @@ export const getDashboard = async () => {
 export const getCourses = async (id) => {
   try {
     const response = await api.get(`${API_BASE_URL}/api/student_profile/${id}/courses`);
-    console.log("API_BASE_URLt", response)
     return response.data;
   } catch (error) {
     throw error;
@@ -349,6 +352,7 @@ export const getAssessment = async (id) => {
 export const getResults = async (testId, studentId) => {
   try {
     const response = await api.get(`${API_BASE_URL}/api/test/${testId}/student/${studentId}/result`);
+    console.log("object", response.data)
     return response.data;
   } catch (error) {
     throw error;

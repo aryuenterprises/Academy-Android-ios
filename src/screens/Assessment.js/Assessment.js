@@ -23,6 +23,7 @@ import { navigate } from '../../navigation/RootNavigation';
 import { globalstyles } from '../../utils/globalStyles';
 import Toast from 'react-native-toast-message';
 import { useAppTheme } from '../../hook/useAppTheme';
+import { useNavigation } from '@react-navigation/native';
 
 // Custom RadioButton component
 const RadioButton = ({ selected, onPress, style }) => {
@@ -35,7 +36,7 @@ const RadioButton = ({ selected, onPress, style }) => {
     );
 };
 
-const Assessment = ({ navigation, route }) => {
+const Assessment = ({ route }) => {
     useFooterVisibility()
     const { test_id, submitted } = route.params || {};
     const [answers, setAnswers] = useState({});
@@ -49,6 +50,7 @@ const Assessment = ({ navigation, route }) => {
     const { studentProfile, user, token, globalCourseId } = useSelector(state => state.auth);
     const { colors: themeColors, isDark } = useAppTheme();
     const insets = useSafeAreaInsets();
+    const navigation = useNavigation()
 
     useEffect(() => {
         checkExistingResults();
@@ -452,9 +454,9 @@ const Assessment = ({ navigation, route }) => {
             });
 
             const response = await api.post(`${API_BASE_URL}/api/answers`, answersData);
-
+                console.log("answers response" ,response )
             if (response.data.success) {
-
+                console.log("response.data", response.data)
                 // Fetch and display results
                 const resultsResponse = await getResults(test_id, user.student_id);
                 setResult(resultsResponse);

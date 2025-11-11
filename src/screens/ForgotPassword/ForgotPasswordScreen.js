@@ -27,6 +27,7 @@ import GradientButton from '../../components/GradientButton/gradientButton';
 import { hp, moderateScale } from '../../utils/responsive';
 import { TextInput, Button } from 'react-native-paper';
 import { useFormFocusAdvanced } from '../../utils/useFormFocusAdvanced';
+import { smartPreload } from '../../utils/smartPreload';
 
 const ForgotPasswordScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -52,10 +53,11 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
         setLoading(true);
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/forgot-password`, {
+            const response = await axios.post(`${API_BASE_URL}/api/forgot-password/`, {
                 email: email.toLowerCase().trim(),
             });
             if (response.status === 200) {
+                smartPreload('VerifyOTPScreen');
                 navigation.navigate('VerifyOTPScreen', { email: email.toLowerCase().trim() });
             }
         } catch (error) {
@@ -66,7 +68,8 @@ const ForgotPasswordScreen = ({ navigation }) => {
             });
         } finally {
             setLoading(false);
-            navigation.navigate('VerifyOTPScreen', { email: email.toLowerCase().trim() });
+            // smartPreload('VerifyOTPScreen');
+            // navigation.navigate('VerifyOTPScreen', { email: email.toLowerCase().trim() });
 
         }
     };

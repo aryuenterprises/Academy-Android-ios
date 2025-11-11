@@ -9,6 +9,7 @@ import { ExpandableCalendar, AgendaList, CalendarProvider } from 'react-native-c
 import moment from 'moment';
 import { moderateScale } from '../../utils/responsive';
 import FilterModal from '../../components/FilterModal/FilterModal';
+import { smartPreload } from '../../utils/smartPreload';
 
 const dummyTasks = [
   {
@@ -421,6 +422,7 @@ const TaskListScreen = () => {
     <TouchableOpacity
       style={styles.itemContainer}
       activeOpacity={0.7}
+      onPressIn={() => smartPreload('TaskDetail')}
       onPress={() => navigation.navigate("TaskDetail", { index: index })}
     >
       <Card style={[styles.card, styles.taskCard]}>

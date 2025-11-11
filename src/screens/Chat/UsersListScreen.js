@@ -25,6 +25,7 @@ import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { useAppTheme } from '../../hook/useAppTheme';
+import { smartPreload } from '../../utils/smartPreload';
 
 const UsersListScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -85,6 +86,7 @@ const UsersListScreen = ({ navigation }) => {
       const response = await MarkAsRead(item.id, user)
       if (response.success) {
         await fetchData();
+        smartPreload('ChatScreen')
         navigation.navigate('ChatScreen', { item: item })
       }
     } catch (error) {
@@ -228,6 +230,7 @@ const UsersListScreen = ({ navigation }) => {
       {/* Floating Action Button */}
       <TouchableOpacity
         style={[styles.fab, { backgroundColor: themeColors.primary }]}
+        onPressIn={() => smartPreload('TrainerList')}
         onPress={() => navigation.navigate("TrainerList", { trainer })}
       >
         <Ionicons name="add" size={moderateScale(24)} color={themeColors.white} />

@@ -27,6 +27,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Signup } from '../../services/auth';
 import api from '../../services/api';
 import Toast from 'react-native-toast-message';
+import { smartPreload } from '../../utils/smartPreload';
 
 const RegisterSchema = Yup.object().shape({
   // firstName: Yup.string().required('First name is required'),
@@ -505,6 +506,7 @@ const RegisterScreen = ({ navigation }) => {
 
                           <TouchableOpacity
                             style={globalstyles.forgotPassword}
+                            onPressIn={() => smartPreload('ForgotPassword')}
                             onPress={() => navigation.navigate('ForgotPassword')}
                           >
                             <Text style={globalstyles.forgotPasswordText}>Forgot Password?</Text>
@@ -523,7 +525,9 @@ const RegisterScreen = ({ navigation }) => {
 
                           <View style={globalstyles.loginContainer}>
                             <Text style={globalstyles.loginText}>Already have an account?</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                            <TouchableOpacity
+                              onPressIn={() => smartPreload('Login')}
+                              onPress={() => navigation.navigate('Login')}>
                               <Text style={globalstyles.loginLink}> Login</Text>
                             </TouchableOpacity>
                           </View>

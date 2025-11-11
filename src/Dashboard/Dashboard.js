@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomHeader from '../components/CustomHeader/CustomHeader';
 import { useAppTheme } from '../hook/useAppTheme';
 import Toast from 'react-native-toast-message';
-
+import { smartPreload } from "../utils/smartPreload.js"
 const screenWidth = Dimensions.get('window').width;
 
 // Dedicated Dashboard Skeleton Component using the specified approach
@@ -82,7 +82,6 @@ const StudentDashboard = () => {
   const { studentProfile, user, token } = useSelector(state => state.auth);
   const { theme, colors: themeColors, isDark, getColor } = useAppTheme(); // Use the theme hook
   const insets = useSafeAreaInsets();
-
   // useFocusEffect(
   //   useCallback(() => {
   //     // fetchData();
@@ -100,12 +99,13 @@ const StudentDashboard = () => {
         fetchData();
         fetchNotifications();
         getStudentProfile(user.student_id);
-        setHasMounted(true); // ← THIS UPDATES THE STATE
+        setHasMounted(true);
         getSettings();
       } else {
         // Subsequent focuses - only refresh notifications and settings
         fetchNotifications();
         getStudentProfile(user.student_id);
+        getSettings();
       }
     }
   }, [isFocused, hasMounted]);
@@ -156,6 +156,7 @@ const StudentDashboard = () => {
       setLoading(true);
       // Assuming you have an API endpoint to fetch notifications
       const response = await getNotifications(); // You'll need to implement this in your auth service
+      console.log("response", response)
       setNotifications(response.notifications || []);
     } catch (error) {
       Toast.show({
@@ -209,6 +210,7 @@ const StudentDashboard = () => {
               <View style={styles.notificationContainer}>
                 <TouchableOpacity
                   style={styles.notificationIcon}
+                  onPressIn={() => smartPreload('Notification')}
                   onPress={() => navigation.navigate('Notification', { data: notifications })}
                 >
                   <Ionicons name="notifications" size={moderateScale(24)} color={themeColors.textPrimary} />
@@ -336,7 +338,9 @@ const StudentDashboard = () => {
               <View style={styles.section}>
                 <View style={globalstyles.sectionHeader}>
                   <Text style={[globalstyles.sectionTitle, { color: themeColors.textPrimary }]}>Upcoming Class</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate("Classes")}>
+                  <TouchableOpacity 
+                  onPressIn={() => smartPreload('Classes')}
+                  onPress={() => navigation.navigate("Classes")}>
                     <Text style={globalstyles.seeAllText}>View All</Text>
                   </TouchableOpacity>
                 </View>

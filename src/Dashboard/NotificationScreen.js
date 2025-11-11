@@ -13,6 +13,7 @@ import { store } from '../redux/store'
 import { setGlobalCourseId } from '../redux/slices/authSlice'
 import { useAppTheme } from '../hook/useAppTheme'
 import Toast from 'react-native-toast-message'
+import { smartPreload } from '../utils/smartPreload'
 
 const NotificationScreen = ({ route, navigation }) => {
     const [notifications, setNotifications] = useState([]);
@@ -78,10 +79,12 @@ const NotificationScreen = ({ route, navigation }) => {
             if (response.data.success) {
                 fetchNotifications()
                 if (item?.message?.toLowerCase().includes("class")) {
+                    smartPreload('Attendance')
                     navigation.navigate("Attendance")
                 }
                 else if (item?.message?.toLowerCase()?.includes("submission_reply")) {
                     store.dispatch(setGlobalCourseId(item.course_id));
+                    smartPreload('TaskDetail')
                     navigation.navigate('Course', {
                         screen: 'TaskDetail',
                         params: { itemId: item.assignment_id }
@@ -89,6 +92,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 }
                 // else if (item?.message?.toLowerCase()?.includes("test_result")) {
                 //     store.dispatch(setGlobalCourseId(item.course_id));
+                //  smartPreload('Assessment')
                 //     navigation.navigate('Course', {
                 //         screen: 'Assessment',
                 //         params: { test_id: item.test_id, submitted: true }

@@ -30,6 +30,7 @@ import { useAuthAnimations } from '../../hook/useAuthAnimations';
 import AuthWrapper from '../../components/AuthWrapper/AuthWrapper';
 import GradientButton from '../../components/GradientButton/gradientButton';
 import { useFormFocusAdvanced } from '../../utils/useFormFocusAdvanced';
+import { smartPreload } from '../../utils/smartPreload';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().required('Email or username is required'), // Updated validation message
@@ -55,13 +56,14 @@ const LoginScreen = () => {
     scrollRef
   );
 
-    const handleLogin = async (values, { setSubmitting }) => {
+  const handleLogin = async (values, { setSubmitting }) => {
     try {
       setLoading(true);
       setSubmitError('');
       setSubmitting(true);
       const response = await login(values.email, values.password);
       if (response.token) {
+        smartPreload('Dashboard');
         resetToApp();
       } else {
         setSubmitError(response?.message);
@@ -114,13 +116,13 @@ const LoginScreen = () => {
             onSubmit={handleLogin}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => {
-              
+
               // ✅ Store the submit function in ref for access in the hook
               formikSubmitRef.current = handleSubmit;
 
               return (
                 <View style={globalstyles.keyboardAvoidingView}>
-                  
+
                   {/* Email Input */}
                   <View style={globalstyles.inputWrapper}>
                     <Text style={globalstyles.inputLabel}>Email or Username</Text>
@@ -160,8 +162,6 @@ const LoginScreen = () => {
                       <Text style={globalstyles.error}>{errors.email}</Text>
                     )}
                   </View>
-
-                  {/* Password Input */}
                   <View style={globalstyles.inputWrapper}>
                     <Text style={globalstyles.inputLabel}>Password</Text>
                     <TextInput
@@ -215,6 +215,7 @@ const LoginScreen = () => {
 
                   <TouchableOpacity
                     style={globalstyles.forgotPassword}
+                    onPressIn={() => smartPreload('ForgotPasswordScreen')}
                     onPress={() => navigation.navigate('ForgotPasswordScreen')}
                   >
                     <Text style={globalstyles.forgotPasswordText}>Forgot Password?</Text>

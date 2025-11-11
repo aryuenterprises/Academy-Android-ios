@@ -11,6 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { hp } from '../../utils/responsive';
 import GradientButton from '../../components/GradientButton/gradientButton';
+import { smartPreload } from '../../utils/smartPreload';
 
 const ProfileScreen = ({ navigation }) => {
     const [gender, setGender] = useState('male');
@@ -138,7 +139,7 @@ const ProfileScreen = ({ navigation }) => {
 
 
                     {openDate && (
-                         <DateTimePicker
+                        <DateTimePicker
                             value={date || new Date()}
                             mode="date"
                             maximumDate={new Date()} // This prevents future dates in the picker
@@ -152,6 +153,7 @@ const ProfileScreen = ({ navigation }) => {
                 <GradientButton
                     colors={['#BA000C', '#5E000B']}
                     text="Continue"
+                    onPressIn={() => smartPreload('Dashboard')}
                     onPress={() => navigation.navigate("Dashboard")}
                 />
             </View>

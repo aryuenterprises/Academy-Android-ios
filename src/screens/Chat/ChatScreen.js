@@ -189,7 +189,7 @@ const ChatScreen = ({ navigation, route }) => {
       setInputText('');
 
       // Send message via REST API/euybfvh
-      const response = await api.post(`/api/chat/rooms/${item.id}/euybfvh`, {
+      const response = await api.post(`${API_BASE_URL}/api/chat/rooms/${item.id}/euybfvh`, {
         room: item.id,
         sender_type: user.user_type,
         sender_id: user.user_type === 'student' ? user.registration_id : user.employee_id,

@@ -132,6 +132,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
             mode="contained"
             style={styles.enrollButton}
             labelStyle={styles.enrollButtonText}
+            onPressIn={() => smartPreload('PurchaseCourse')}
             onPress={() => navigation.navigate('PurchaseCourse', { id: item.id })}
           >
             Enroll

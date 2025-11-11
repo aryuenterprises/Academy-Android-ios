@@ -24,6 +24,7 @@ import { useAuthAnimations } from '../../hook/useAuthAnimations';
 import { hp, moderateScale } from '../../utils/responsive';
 import { TextInput, Button } from 'react-native-paper';
 import GradientButton from '../../components/GradientButton/gradientButton';
+import { smartPreload } from '../../utils/smartPreload';
 
 const VerifyOTPScreen = ({ route, navigation }) => {
     const { email } = route.params;
@@ -77,6 +78,7 @@ const VerifyOTPScreen = ({ route, navigation }) => {
             });
 
             if (response.status === 200) {
+                smartPreload('ResetPasswordScreen')
                 navigation.navigate('ResetPasswordScreen', { email: email });
             }
         } catch (error) {
@@ -87,6 +89,7 @@ const VerifyOTPScreen = ({ route, navigation }) => {
             });
         } finally {
             setLoading(false);
+            smartPreload('ResetPasswordScreen')
             navigation.navigate('ResetPasswordScreen', { email: email });
         }
     };

@@ -25,6 +25,7 @@ import { setGlobalCourseId, ClearGlobalCourseId } from '../../redux/slices/authS
 import { store } from '../../redux/store';
 import { useAppTheme } from '../../hook/useAppTheme';
 import Toast from 'react-native-toast-message';
+import { smartPreload } from '../../utils/smartPreload';
 
 const CourseListSkeleton = ({ theme }) => (
     <SkeletonPlaceholder
@@ -139,6 +140,7 @@ const CourseListScreen = () => {
 
     const handleNavigation = (item) => {
         store.dispatch(setGlobalCourseId(item.course_id));
+        smartPreload('CourseDetailScreen')
         navigation.navigate('CourseDetailScreen')
     }
 
@@ -172,9 +174,6 @@ const CourseListScreen = () => {
                             style={styles.courseImage}
                             resizeMode="cover"
                         />}
-                    {/* <View style={[styles.categoryBadge, { backgroundColor: themeColors.primary }]}>
-                        <Text style={[styles.categoryText, { color: themeColors.white }]}>{item.course_category}</Text>
-                    </View> */}
                 </View>
 
                 <View style={styles.courseContent}>

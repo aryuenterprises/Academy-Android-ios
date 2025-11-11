@@ -18,6 +18,7 @@ import {
     Keyboard,
     FlatList,
     StatusBar,
+    DeviceEventEmitter,
 } from 'react-native';
 import { Avatar, Button, Card, Chip, Divider, IconButton } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -43,6 +44,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import Toast from 'react-native-toast-message';
 import { useAppTheme } from '../../hook/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import DeviceInfo from 'react-native-device-info';
 
 const { width } = Dimensions.get('window');
 
@@ -119,47 +121,179 @@ const TaskDetailsScreen = ({ route, navigation }) => {
     const translateY = useRef(new Animated.Value(0)).current;
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [inputContainerHeight, setInputContainerHeight] = useState(0);
+    const [deviceBrand, setDeviceBrand] = useState('');
+    const [deviceModel, setDeviceModel] = useState(''); // Renamed from 'modal' to 'deviceModel' for clarity
+    console.log("Platform.Version", Platform.Version)
 
     useEffect(() => {
         fetchExercises();
+        detectDeviceBrand();
+    }, []);
 
-        // Keyboard listeners
-        const keyboardWillShow = Keyboard.addListener(
-            Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-            (e) => {
-                const { height } = e.endCoordinates;
-                setKeyboardHeight(height);
-                const translation = -height + insets.bottom
-                Animated.timing(translateY, {
-                    toValue: Platform.OS === 'ios' ? translation : translateY._offset,
-                    duration: 250,
-                    useNativeDriver: true,
-                }).start();
+    const detectDeviceBrand = async () => {
+        try {
+            const brand = await DeviceInfo.getBrand();
+            const model = await DeviceInfo.getModel();
+            console.log("Device Info:", { brand, model });
+            setDeviceBrand(brand.toLowerCase());
+            setDeviceModel(model.toLowerCase()); // Better variable name
+        } catch (error) {
+            console.log('Device detection error:', error);
+        }
+    };
 
-                // Auto-scroll to bottom when keyboard appears
-                setTimeout(() => {
-                    scrollViewRef.current?.scrollToEnd({ animated: true });
-                }, 100);
-            }
+    const needsManualKeyboardHandling = () => {
+        if (Platform.OS === 'ios') {
+            return false; // iOS generally handles this well
+        }
+
+        // List of Android devices that typically need manual handling
+        const manualHandlingBrands = [
+            'xiaomi', 'redmi', 'oppo', 'vivo',
+            'realme', 'oneplus', 'huawei', 'honor'
+        ];
+
+        // If we can't detect brand, assume manual handling for Android
+        if (!deviceBrand) return true;
+
+        // Check if device needs manual handling based on brand
+        const needsManualByBrand = manualHandlingBrands.some(brand =>
+            deviceBrand.toLowerCase().includes(brand)
         );
 
-        const keyboardWillHide = Keyboard.addListener(
-            Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-            () => {
-                setKeyboardHeight(0);
+        // Additional check for specific Galaxy models that need manual handling
+        const needsManualByGalaxyModel = isGalaxyWithManualKeyboard();
+
+        return needsManualByBrand || needsManualByGalaxyModel;
+    };
+
+    // New function to check specific Galaxy models that need manual adjustment
+    const isGalaxyWithManualKeyboard = () => {
+        if (!deviceBrand.includes('samsung') && !deviceBrand.includes('galaxy')) {
+            return false; // Not a Samsung/Galaxy device
+        }
+
+        // List of Galaxy models that require manual keyboard handling
+        const galaxyModelsWithManualKeyboard = [
+            // Galaxy A Series problematic models
+            'sm-a336', 'a33', 'a33 5g', 'sm-a336e', 'sm-a336b', 'sm-a336m',
+            'sm-a3360', 'a33 5g uw',
+
+            // Add other problematic Galaxy models here
+            'sm-a135', 'a13',
+            'sm-a037', 'a03',
+            'sm-a146', 'a14',
+
+            // M Series problematic models
+            'sm-m135', 'm13',
+            'sm-m336', 'm33',
+
+            // You can expand this list as needed
+        ];
+
+        return galaxyModelsWithManualKeyboard.some(model =>
+            deviceModel.toLowerCase().includes(model.toLowerCase())
+        );
+    };
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const enhancedNeedsManualKeyboardHandling = () => {
+            return needsManualKeyboardHandling();
+        };
+
+        const keyboardDidShow = (e) => {
+            if (!isMounted) return;
+
+            try {
+                const { height } = e.endCoordinates;
+                setKeyboardHeight(height);
+
+                if (enhancedNeedsManualKeyboardHandling()) {
+                    const translation = -height;
+
+                    Animated.timing(translateY, {
+                        toValue: translation,
+                        duration: 250,
+                        useNativeDriver: true,
+                    }).start();
+
+                    console.log('Manual keyboard adjustment applied for:', {
+                        brand: deviceBrand,
+                        model: deviceModel,
+                        height: height
+                    });
+                } else {
+                    console.log('Auto keyboard adjustment for:', {
+                        brand: deviceBrand,
+                        model: deviceModel
+                    });
+                }
+
+                robustScrollToBottom();
+
+            } catch (error) {
+                console.log('Keyboard handling error:', error);
+            }
+        };
+
+        const keyboardDidHide = () => {
+            if (!isMounted) return;
+
+            // Only reset if we applied manual adjustment
+            if (enhancedNeedsManualKeyboardHandling()) {
                 Animated.timing(translateY, {
                     toValue: 0,
                     duration: 250,
                     useNativeDriver: true,
                 }).start();
             }
-        );
+        };
+
+        const robustScrollToBottom = () => {
+            if (!scrollViewRef.current || !isMounted) return;
+
+            const scrollAttempts = [
+                { delay: 100, method: 'scrollToEnd' },
+                { delay: 200, method: 'scrollToOffset' },
+                { delay: 350, method: 'scrollToEnd' }
+            ];
+
+            scrollAttempts.forEach(({ delay, method }) => {
+                setTimeout(() => {
+                    if (!scrollViewRef.current || !isMounted) return;
+
+                    try {
+                        if (method === 'scrollToEnd') {
+                            scrollViewRef.current.scrollToEnd({ animated: true });
+                        } else {
+                            scrollViewRef.current.scrollToOffset({
+                                offset: 100000,
+                                animated: true
+                            });
+                        }
+                    } catch (scrollError) {
+                        console.log('Scroll attempt failed:', scrollError);
+                    }
+                }, delay);
+            });
+        };
+
+        const showSubscription = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
+        const hideSubscription = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+
+        // Initial scroll after mount
+        setTimeout(() => {
+            if (isMounted) robustScrollToBottom();
+        }, 500);
 
         return () => {
-            keyboardWillShow.remove();
-            keyboardWillHide.remove();
+            isMounted = false;
+            showSubscription.remove();
+            hideSubscription.remove();
         };
-    }, []);
+    }, [deviceBrand, deviceModel, translateY]); // Added deviceModel to dependencies
 
     // Measure input container height
     const onInputContainerLayout = (event) => {
@@ -1025,7 +1159,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                 style={[
                     styles.commentInputContainer,
                     {
-                        transform: [{ translateY: translateY }]
+                        transform: [{ translateY }],
                     }
                 ]}
                 onLayout={onInputContainerLayout}

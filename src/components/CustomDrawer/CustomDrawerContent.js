@@ -32,6 +32,7 @@ import Toast from 'react-native-toast-message';
 import { toggleTheme, selectIsDarkMode, } from '../../redux/slices/themeSlice';
 import { useAppTheme } from '../../hook/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { smartPreload } from '../../utils/smartPreload';
 const { width: screenWidth } = Dimensions.get('window');
 
 // Job portal links array
@@ -234,6 +235,7 @@ const CustomDrawerContent = (props) => {
             >
                 {/* Profile Header Section */}
                 <TouchableOpacity
+                    onPressIn={() => smartPreload('Profile')}
                     onPress={() => navigation.navigate("Profile")}
                     style={styles.profileHeader}
                 >
@@ -310,6 +312,7 @@ const CustomDrawerContent = (props) => {
                     {/* Additional Custom Items */}
                     <TouchableOpacity
                         style={styles.drawerItem}
+                        onPressIn={() => smartPreload('Recording')}
                         onPress={() => navigation.navigate('Recording')}
                     >
                         <MaterialIcons name="video-collection" size={hp("2.8%")} color={themeColors.textGrey} />
@@ -318,6 +321,7 @@ const CustomDrawerContent = (props) => {
 
                     <TouchableOpacity
                         style={styles.drawerItem}
+                        onPressIn={() => smartPreload('TrainerDetails')}
                         onPress={() => navigation.navigate('TrainerDetails', { batch: filteredBatches })}
                     >
                         <Icon name="account-details" size={hp("2.8%")} color={themeColors.textGrey} />
@@ -326,6 +330,7 @@ const CustomDrawerContent = (props) => {
 
                     <TouchableOpacity
                         style={styles.drawerItem}
+                        onPressIn={() => smartPreload('PaymentProgress')}
                         onPress={() => navigation.navigate('PaymentProgress', { batch: filteredBatches })}
                     >
                         <Icon name="cash" size={hp("2.8%")} color={themeColors.textGrey} />
@@ -334,13 +339,14 @@ const CustomDrawerContent = (props) => {
 
                     <TouchableOpacity
                         style={styles.drawerItem}
+                        onPressIn={() => smartPreload('AttendanceDetailScreen')}
                         onPress={() => navigation.navigate('AttendanceDetailScreen', { batch: filteredBatches })}
                     >
                         <Icon name="clock" size={hp("2.8%")} color={themeColors.textGrey} />
                         <Text style={[styles.drawerItemText, { color: themeColors.textGrey }]}>Attendance Logs</Text>
                     </TouchableOpacity>
                 </View>
-            </DrawerContentScrollView >
+            </DrawerContentScrollView>
 
             {/* Footer with Logout */}
             <View style={[styles.drawerFooter, { backgroundColor: themeColors.background }]} >

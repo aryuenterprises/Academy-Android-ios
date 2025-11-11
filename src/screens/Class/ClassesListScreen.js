@@ -15,7 +15,7 @@ import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
-
+import { API_BASE_URL } from '@env'
 const getCurrentDate = () => {
   return moment().format('YYYY-MM-DD');
 };
@@ -201,15 +201,17 @@ const ClassesListScreen = ({ navigation }) => {
   };
 
   const markAttendance = async (item) => {
-    if (!automatic) return;
+    console.log("item", item)
     try {
       const actionType = 'present';
-      await api.post(`/api/attendance/${user.student_id}`, {
+      const attendanceResponse = await api.post(`${API_BASE_URL}/api/attendance/${user.student_id}`, {
         status: actionType,
         course: item.course_id,
         student: user.student_id,
         batch: item.batch_id
       });
+      console.log('attendanceResponse', attendanceResponse)
+      await fetchData()
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -233,10 +235,9 @@ const ClassesListScreen = ({ navigation }) => {
       alert("No meeting link available");
       return;
     }
-
     try {
-      // Mark attendance in background (don't wait for it to complete)
       if (!item.attendance_status) {
+        console.log("1")
         markAttendance(item);
       }
 

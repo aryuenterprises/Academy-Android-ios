@@ -46,6 +46,7 @@ import Toast from 'react-native-toast-message';
 import { useAppTheme } from '../../hook/useAppTheme';
 import { useScrollDetection } from '../../hook/useScrollDetection';
 import { useFooterVisibility } from '../../hook/useFooterVisibility';
+import { smartPreload } from '../../utils/smartPreload';
 
 const getPriorityColor = (priority) => {
     switch (priority) {
@@ -184,7 +185,6 @@ const { width } = Dimensions.get('window');
 
 const CourseDetailsScreen = ({ route, navigation }) => {
     useFooterVisibility()
-    // const { course } = route.params;
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const [assessments, setAssessments] = useState([]);
@@ -208,9 +208,7 @@ const CourseDetailsScreen = ({ route, navigation }) => {
     const { colors: themeColors } = useAppTheme();
     const { handleScroll, createAnimatedScrollView } = useScrollDetection();
     const AnimatedFlatList = createAnimatedScrollView(FlatList);
-    const filteredCourse = studentProfile?.data?.course_detail.find(
-        (item) => item?.course_id === globalCourseId
-    );
+    const filteredCourse = studentProfile?.data?.course_detail.find((item) => item?.course_id === globalCourseId);
 
     const fetchExercises = async (isRefreshing = false) => {
         if (!isRefreshing) setLoading(true);
@@ -420,7 +418,6 @@ const CourseDetailsScreen = ({ route, navigation }) => {
         }
     };
 
-    // Render syllabus tab
     const renderSyllabus = () => (
         <AnimatedFlatList
             onScroll={handleScroll}
@@ -734,6 +731,7 @@ const CourseDetailsScreen = ({ route, navigation }) => {
                     {(item.test_completion && item.correction_done) && (
                         <TouchableOpacity
                             style={[styles.viewResultsButton, { backgroundColor: themeColors.primary }]}
+                            onPressIn={() => smartPreload('Assessment')}
                             onPress={() => navigation.navigate("Assessment", {
                                 test_id: item.test_id,
                                 course: filteredCourse,
@@ -752,6 +750,7 @@ const CourseDetailsScreen = ({ route, navigation }) => {
                                 item.question_count === 0 && { backgroundColor: themeColors.textSecondary }
                             ]}
                             disabled={item.question_count === 0}
+                            onPressIn={() => smartPreload('Assessment')}
                             onPress={() => navigation.navigate("Assessment", { test_id: item.test_id, submitted: false })}
                         >
                             <Text style={[styles.actionButtonText, { color: themeColors.white }]}>
@@ -795,6 +794,7 @@ const CourseDetailsScreen = ({ route, navigation }) => {
                     <TouchableOpacity
                         style={styles.itemContainer}
                         activeOpacity={0.7}
+                        onPressIn={() => smartPreload('TaskDetail')}
                         onPress={() => navigation.navigate("TaskDetail", { itemId: item.id, index: index })}
                     >
                         <Card style={[styles.card, styles.taskCard, { backgroundColor: themeColors.card || themeColors.surface }]}>

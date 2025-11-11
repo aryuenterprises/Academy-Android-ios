@@ -3,7 +3,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 // Import your screens
 import DashboardScreen from '../Dashboard/Dashboard';
@@ -46,6 +46,8 @@ const getHeaderOptions = (navigation, title, showBackButton = false, themeColors
   title: title,
   headerTitleAlign: 'center',
   headerLeft: () => {
+      const navigation = useNavigation()
+
     if (showBackButton) {
       return (
         <TouchableOpacity
@@ -63,6 +65,7 @@ const getHeaderOptions = (navigation, title, showBackButton = false, themeColors
         </TouchableOpacity>
       );
     }
+    
     return (
       <TouchableOpacity
         onPress={() => navigation.toggleDrawer()}
@@ -158,7 +161,7 @@ const MainDrawerNavigator = () => {
         name="PaymentProgress"
         component={PaymentProgress}
         options={({ navigation }) => getHeaderOptions(navigation, 'Payment Progress', true, themeColors)}
-      />      
+      />
       <Stack.Screen
         name="AttendanceDetailScreen"
         component={AttendanceDetailScreen}
@@ -190,11 +193,15 @@ const ClassStack = () => {
 }
 
 // Course Stack
+// Course Stack
 const CourseStack = () => {
   const { colors: themeColors } = useAppTheme();
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="CourseListScreen"
+    >
       <Stack.Screen
         name="CourseListScreen"
         component={CourseListScreen}
@@ -203,11 +210,15 @@ const CourseStack = () => {
       <Stack.Screen
         name="CourseDetailScreen"
         component={CourseDetailScreen}
-      // options={({ navigation }) => getHeaderOptions(navigation, 'Course Details', true)}
+        options={{
+          ...getHeaderOptions(null, 'Course Details', true, themeColors),
+          headerShown: false
+        }}
       />
       <Stack.Screen
         name="Tasks"
         component={TaskListScreen}
+        options={({ navigation }) => getHeaderOptions(navigation, 'Tasks', true, themeColors)}
       />
       <Stack.Screen
         name="TaskDetail"
@@ -222,7 +233,6 @@ const CourseStack = () => {
     </Stack.Navigator>
   );
 }
-
 // Dashboard Stack
 const DashboardStack = () => {
   const { colors: themeColors } = useAppTheme();
