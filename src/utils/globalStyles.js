@@ -272,7 +272,7 @@ export const globalstyles = StyleSheet.create({
     flexRowBetween: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        // alignItems: 'center'
     },
     statCard: {
         backgroundColor: '#f9f9f9',

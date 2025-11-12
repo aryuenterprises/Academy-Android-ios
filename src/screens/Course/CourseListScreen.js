@@ -177,10 +177,19 @@ const CourseListScreen = () => {
                 </View>
 
                 <View style={styles.courseContent}>
-                    <Text style={[styles.courseName, { color: themeColors.textPrimary }]}>
-                        {item.course_name}
-                    </Text>
+                    <View style={globalstyles.flexRowBetween}>
+                        <Text style={[styles.courseName, { color: themeColors.textPrimary }]}>
+                            {item.course_name}
+                        </Text>
 
+                        <View style={styles.arrowContainer}>
+                            <Icon
+                                name="eye"
+                                size={moderateScale(20)}
+                                color={themeColors.textSecondary}
+                            />
+                        </View>
+                    </View>
                     <View style={styles.courseMeta}>
                         <View style={styles.metaItem}>
                             <Icon name="clock-outline" size={moderateScale(16)} color={themeColors.textSecondary} />
@@ -319,6 +328,7 @@ const styles = StyleSheet.create({
         padding: moderateScale(16),
     },
     courseName: {
+        maxWidth: "95%",
         fontSize: moderateScale(18),
         fontFamily: 'Manrope-Bold',
         color: '#1e293b',
@@ -414,6 +424,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: moderateScale(16),
     },
+
+    arrowContainer: {
+        paddingHorizontal: hp("1%"),
+        paddingTop: hp("0.6%"),
+        // position: 'absolute',
+        // right: 0,
+        // top: '30%',
+        // transform: [{ translateY: -10 }],
+    }
 });
 
 export default CourseListScreen;

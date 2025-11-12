@@ -154,7 +154,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
     <SafeAreaView style={globalstyles.container}>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={styles.scrollViewContent} // Add this
+        contentContainerStyle={styles.scrollViewContent}
       >
         {/* Class Header Section */}
         <Card style={[globalstyles.card, styles.classHeader]}>

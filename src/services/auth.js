@@ -241,6 +241,7 @@ export const attendanceService = {
 //  Student Profile
 export const getStudentProfile = async (studentId) => {
   try {
+    console.log("studentId", studentId)
     const response = await api.get(`${API_BASE_URL}/api/student_profile/${studentId}`
     );
     const profileData = response.data;

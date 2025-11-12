@@ -156,7 +156,6 @@ const StudentDashboard = () => {
       setLoading(true);
       // Assuming you have an API endpoint to fetch notifications
       const response = await getNotifications(); // You'll need to implement this in your auth service
-      console.log("response", response)
       setNotifications(response.notifications || []);
     } catch (error) {
       Toast.show({
@@ -229,7 +228,7 @@ const StudentDashboard = () => {
             {data?.announcements?.length > 0 ? (
               <>
                 <View style={globalstyles.sectionHeader}>
-                  <Text style={globalstyles.sectionTitle}>Announcements</Text>
+                  <Text style={[globalstyles.sectionTitle, { color: themeColors.textPrimary }]}>Announcements</Text>
                 </View>
                 <View style={styles.announcementContainer}>
                   <Carousel

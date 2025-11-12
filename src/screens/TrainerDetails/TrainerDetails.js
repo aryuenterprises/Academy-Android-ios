@@ -34,8 +34,45 @@ const TrainerDetails = ({ route }) => {
             setRefreshing(true);
             setLoading(true);
             const profile = await getStudentProfile(user?.student_id);
-            console.log("getStudentProfile", profile.data.batch)
-            setData(profile.data.batch);
+
+            console.log("first", profile.data)
+            if (profile?.data?.batch) {
+                const userAssignments = profile?.data?.batch.flatMap((batch) =>
+                    batch.course_trainer_assignments.filter((assignment) => assignment.student_id === user.student_id)
+                );
+
+                // 2. Extract unique courses (not trainers, since they're all the same)
+                const uniqueCourses = Array.from(
+                    new Map(
+                        userAssignments.map((assignment) => {
+                            // Find the batch that contains this assignment
+                            const batch = profile?.data?.batch.find((b) =>
+                                b.course_trainer_assignments.some(
+                                    (cta) => cta.course_id === assignment.course_id && cta.student_id === assignment.student_id
+                                )
+                            );
+
+                            return [
+                                assignment.course_id, // Use course_id as the unique key
+                                {
+                                    course_name: assignment.course_name,
+                                    course_id: assignment.course_id,
+                                    trainer_name: assignment.trainer_name,
+                                    employee_id: assignment.employee_id,
+                                    batch_title: batch?.title || 'Unknown Batch', // Safely access batch title
+                                    batch_id: batch?.batch_id || 'unknown' // Add batch_id for unique keys
+                                }
+                            ];
+                        })
+                    ).values()
+                );
+
+                console.log("Unique trainers:", uniqueCourses);
+                setData(uniqueCourses);
+            } else {
+                setData([]);
+                console.warn('No trainer data found in response');
+            }
         } catch (error) {
             Toast.show({
                 type: 'error',
@@ -65,8 +102,34 @@ const TrainerDetails = ({ route }) => {
 
     const renderBatchItem = ({ item }) => (
         <View style={[styles.batchCard, { backgroundColor: themeColors.card }]}>
-            {/* Batch Header */}
             <View style={styles.batchHeader}>
+                <Icon name="book-open" size={hp('2.2%')} color={themeColors.primary} />
+                <View style={styles.infoContent}>
+                    <Text style={[styles.infoLabel, { color: themeColors.textPrimary }]}>Course</Text>
+                    <Text style={[styles.infoValue, { color: themeColors.textSecondary }]}>{item.course_name || 'N/A'}</Text>
+                </View>
+            </View>
+
+            {/* Trainer Information */}
+            <View style={styles.assignmentCard}>
+                <View style={styles.infoRow}>
+                    <Icon name="account" size={hp('2.2%')} color={colors.textSecondary} />
+                    <View style={styles.infoContent}>
+                        <Text style={[styles.infoLabel, { color: themeColors.textPrimary }]}>Trainer</Text>
+                        <Text style={[styles.infoValue, { color: themeColors.textSecondary }]}>{item.trainer_name || 'N/A'}</Text>
+                    </View>
+                </View>
+
+                <View style={styles.infoRow}>
+                    <Icon name="identifier" size={hp('2.2%')} color={colors.textSecondary} />
+                    <View style={styles.infoContent}>
+                        <Text style={[styles.infoLabel, { color: themeColors.textPrimary }]}>Trainer ID</Text>
+                        <Text style={[styles.infoValue, { color: themeColors.textSecondary }]}>{item.employee_id || 'N/A'}</Text>
+                    </View>
+                </View>
+            </View>
+            {/* Batch Header */}
+            {/* <View style={styles.batchHeader}>
                 <Icon name="calendar-clock" size={hp('2.5%')} color={themeColors.primary} />
                 <Text style={[styles.batchName, { color: themeColors.textPrimary }]}>{capitalizeFirstLetter(item?.title)}</Text>
                 <View style={[styles.dateBadge, { color: themeColors.textSecondary }]}>
@@ -74,10 +137,10 @@ const TrainerDetails = ({ route }) => {
                         {formatDateTime(item?.scheduled_date, { includeTime: false })}
                     </Text>
                 </View>
-            </View>
+            </View> */}
 
             {/* Trainer Assignments */}
-            {item?.course_trainer_assignments
+            {/* {item?.course_trainer_assignments
                 ?.filter(assignment => assignment.student_id === user?.student_id)
                 .map((assignment, assignmentIndex) => (
                     <View key={`${assignmentIndex}-${assignment.course_id || assignmentIndex}`} style={styles.assignmentCard}>
@@ -121,7 +184,7 @@ const TrainerDetails = ({ route }) => {
                         </View>
                     </View>
                 ))
-            }
+            } */}
         </View>
     );
 
@@ -176,8 +239,8 @@ const styles = StyleSheet.create({
     batchHeader: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: hp('1%'),
-        paddingBottom: hp('0.5%'),
+        // marginBottom: hp('1%'),
+        paddingBottom: hp('1%'),
         borderBottomWidth: 1,
         borderBottomColor: colors.lightGray,
     },

@@ -122,8 +122,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [inputContainerHeight, setInputContainerHeight] = useState(0);
     const [deviceBrand, setDeviceBrand] = useState('');
-    const [deviceModel, setDeviceModel] = useState(''); // Renamed from 'modal' to 'deviceModel' for clarity
-    console.log("Platform.Version", Platform.Version)
+    const [deviceModel, setDeviceModel] = useState('');
 
     useEffect(() => {
         fetchExercises();
@@ -132,9 +131,8 @@ const TaskDetailsScreen = ({ route, navigation }) => {
 
     const detectDeviceBrand = async () => {
         try {
-            const brand = await DeviceInfo.getBrand();
-            const model = await DeviceInfo.getModel();
-            console.log("Device Info:", { brand, model });
+            const brand = DeviceInfo.getBrand();
+            const model = DeviceInfo.getModel();
             setDeviceBrand(brand.toLowerCase());
             setDeviceModel(model.toLowerCase()); // Better variable name
         } catch (error) {

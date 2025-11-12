@@ -265,6 +265,7 @@ const ClassesListScreen = ({ navigation }) => {
   };
 
   const renderClassItem = ({ item, index }) => {
+    console.log("item", item)
     return (
       <View style={[
         globalstyles.card,
