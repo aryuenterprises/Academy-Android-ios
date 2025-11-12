@@ -3,8 +3,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import { MMKV } from 'react-native-mmkv';
 import authReducer from './slices/authSlice';
-import footerReducer from './slices/footerSlice';
-import themeReducer from './slices/themeSlice'; // Add this
+import rootReducer from './reducers';
+
 
 // Create MMKV instance
 export const storage = new MMKV({
@@ -31,18 +31,14 @@ const mmkvStorage = {
 const persistConfig = {
   key: 'root',
   storage: mmkvStorage,
+  whitelist: ['auth'] // Only persist auth slice (or add others)
 };
 
-// Persisted reducer
-const persistedReducer = persistReducer(persistConfig, authReducer);
+// Persist the root reducer, not just authReducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Create store
 export const store = configureStore({
-  reducer: {
-    footer: footerReducer,
-    auth: persistedReducer,
-    theme: themeReducer, // Add theme reducer
-  },
+  reducer: persistedReducer, // Use persisted reducer
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -50,5 +46,4 @@ export const store = configureStore({
       },
     }),
 });
-
 export const persistor = persistStore(store);
