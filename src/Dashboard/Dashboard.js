@@ -223,11 +223,9 @@ const StudentDashboard = () => {
                 </TouchableOpacity>
               </View>
             </View>
-
-            {/* Announcements Carousel Banner */}
             {data?.announcements?.length > 0 ? (
               <>
-                <View style={globalstyles.sectionHeader}>
+                <View style={[globalstyles.sectionHeader, {marginTop: 0}]}>
                   <Text style={[globalstyles.sectionTitle, { color: themeColors.textPrimary }]}>Announcements</Text>
                 </View>
                 <View style={styles.announcementContainer}>
@@ -337,9 +335,9 @@ const StudentDashboard = () => {
               <View style={styles.section}>
                 <View style={globalstyles.sectionHeader}>
                   <Text style={[globalstyles.sectionTitle, { color: themeColors.textPrimary }]}>Upcoming Class</Text>
-                  <TouchableOpacity 
-                  onPressIn={() => smartPreload('Classes')}
-                  onPress={() => navigation.navigate("Classes")}>
+                  <TouchableOpacity
+                    onPressIn={() => smartPreload('Classes')}
+                    onPress={() => navigation.navigate("Classes")}>
                     <Text style={globalstyles.seeAllText}>View All</Text>
                   </TouchableOpacity>
                 </View>
